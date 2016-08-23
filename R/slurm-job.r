@@ -20,8 +20,6 @@ SlurmJob <- R6::R6Class("SlurmJob",
                 private$base_dir <- container_location
 
                 private$find_globals()
-
-                self$container <- SlurmContainer$new(container_location)
             } else {
                 stop("A file containing a main() function must be provided.")
             }
@@ -43,17 +41,21 @@ SlurmJob <- R6::R6Class("SlurmJob",
                 }
             }
 
+            container <- SlurmContainer$new(container_location)
+
             for (name in names(self$params)) {
-                self$container$add_object(name, self$params[[name]])
+                container$add_object(name, self$params[[name]])
             }
 
             for (file in private$source_files) {
-                self$container$add_source(file)
+                container$add_source(file)
             }
 
             for (file in self$input_files) {
-                self$container$add_input(file)
+                container$add_input(file)
             }
+
+            self$container <- container
         }
     ),
     private = list(
