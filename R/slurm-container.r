@@ -11,7 +11,7 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
             dir <- paste(getwd(), dir, name, sep = "/")
             self$dir <- dir
 
-            for (sub_dir in c("/input", "/ouput", "/sources", "/.objects")) {
+            for (sub_dir in c("/input", "/output", "/sources", "/.objects")) {
                 dir.create(paste0(dir, sub_dir), recursive = TRUE,
                            showWarnings = FALSE)
             }
