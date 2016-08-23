@@ -27,7 +27,7 @@ cd $PFSDIR
 module load hpc-ods
 module load pandoc
 
-R CMD BATCH $1
+R CMD BATCH ./source/$1
 
 for i in ${@:2}
 do
