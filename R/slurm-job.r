@@ -43,12 +43,8 @@ SlurmJob <- R6::R6Class("SlurmJob",
                 }
             }
 
-            objects_dir <- paste(private$base_dir, ".objects", sep = "/")
-
-            for (param in names(self$params)) {
-                value <- self$params[[param]]
-                rdata <- paste(objects_dir, paste0(param, ".RData"), sep = "/")
-                save(value, file = rdata)
+            for (name in names(self$params)) {
+                self$container$add_object(name, self$params[[name]])
             }
 
             # Copy source files to sources directory
