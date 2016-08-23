@@ -15,6 +15,11 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
                 dir.create(paste0(dir, sub_dir), recursive = TRUE,
                            showWarnings = FALSE)
             }
+        },
+        add_object = function(name, value) {
+            obj_dir <- paste0(self$dir, "/.objects")
+            rdata <- paste0(name, ".Rdata")
+            save(value, paste(obj_dir, rdata, sep = "/"))
         }
     ),
     private = list(
