@@ -34,13 +34,6 @@ SlurmJob <- R6::R6Class("SlurmJob",
             input_files <- c(input_files, files)
         },
         create = function() {
-            for (param in names(self$params)) {
-                if (is.na(self$params[[param]])) {
-                    message(paste0("`", param, "` "), appendLF = FALSE)
-                    stop("is NA. Must be specified.")
-                }
-            }
-
             container <- SlurmContainer$new(container_location)
 
             for (name in names(self$params)) {

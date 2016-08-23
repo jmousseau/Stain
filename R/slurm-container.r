@@ -17,16 +17,20 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
             }
         },
         add_object = function(name, value) {
-            obj_dir <- paste0(self$dir, "/.objects")
-            rdata <- paste0(name, ".Rdata")
-            save(value, file = paste(obj_dir, rdata, sep = "/"))
+            if (!is.na(value)) {
+                obj_dir <- paste0(self$dir, "/.objects")
+                rdata <- paste0(name, ".Rdata")
+                save(value, file = paste(obj_dir, rdata, sep = "/"))
+            } else {
+                stop("Object must have an non NA value.")
+            }
         },
         add_source = function(file) {
             if (file.exists(file)) {
                 source_dir <- paste0(self$dir, "/sources")
                 system(paste("cp", file, source_dir))
             } else {
-                warning("Source file does not exist.")
+                stop("Source file does not exist.")
             }
         },
         add_input = function(file) {
@@ -34,7 +38,7 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
                 input_dir <- paste0(self$dir, "/input")
                 system(paste("cp", file, input_dir))
             } else {
-                warning("Source file does not exist.")
+                stop("Source file does not exist.")
             }
         }
     ),
