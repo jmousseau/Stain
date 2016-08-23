@@ -1,4 +1,4 @@
-#' NOAARequest R6 object.
+#' SlurmJob R6 object.
 #'
 #' An interface to SLURM bash scripts and their submissions.
 SlurmJob <- R6::R6Class("SlurmJob",
@@ -8,7 +8,7 @@ SlurmJob <- R6::R6Class("SlurmJob",
         initialize = function(main_file, source_files = list()) {
             if (!missing(main_file)) {
                 self$main_file <- main_file
-                private$source_files = source_files
+                private$source_files <- source_files
 
                 private$find_globals()
             } else {
