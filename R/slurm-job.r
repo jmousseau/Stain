@@ -27,7 +27,7 @@ SlurmJob <- R6::R6Class("SlurmJob",
                     container$add_object(name, self$params[[name]])
                 }
 
-                for (file in self$source_files) {
+                for (file in c(self$source_files, self$main_file)) {
                     container$add_source(file)
                 }
 
