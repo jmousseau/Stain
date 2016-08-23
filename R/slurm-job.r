@@ -3,6 +3,7 @@
 #' An interface to SLURM bash scripts and their submissions.
 SlurmJob <- R6::R6Class("SlurmJob",
     public = list(
+        container = NULL,
         params = list(),
         input_files = list(),
         initialize = function(main_file, container_location = ".", source_files = list()) {
@@ -19,6 +20,8 @@ SlurmJob <- R6::R6Class("SlurmJob",
                 private$base_dir <- container_location
 
                 private$find_globals()
+
+                self$container <- SlurmContainer$new(container_location)
             } else {
                 stop("A file containing a main() function must be provided.")
             }
@@ -40,7 +43,6 @@ SlurmJob <- R6::R6Class("SlurmJob",
                 }
             }
 
-            private$generate_container()
             objects_dir <- paste(private$base_dir, ".objects", sep = "/")
 
             for (param in names(self$params)) {
@@ -109,15 +111,6 @@ SlurmJob <- R6::R6Class("SlurmJob",
 
             private$globals = global_list
             self$params = global_list
-        },
-        generate_container = function() {
-            private$base_dir <- paste0(private$base_dir, "/job")
-            bd <- paste0(private$base_dir, "/")
-            dir.create(paste0(bd, "input"), recursive = TRUE, showWarnings = FALSE)
-            dir.create(paste0(bd, "output"), recursive = TRUE, showWarnings = FALSE)
-            dir.create(paste0(bd, "sources"), recursive = TRUE, showWarnings = FALSE)
-            dir.create(paste0(bd, ".objects"), recursive = TRUE, showWarnings = FALSE)
-
         }
     )
 )
