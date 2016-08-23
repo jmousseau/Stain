@@ -54,6 +54,12 @@ SlurmJob <- R6::R6Class("SlurmJob",
                 cmd <- paste("cp -r", file, paste0(private$base_dir, "/sources"))
                 system(cmd)
             }
+
+            # Copy input files to input directory
+            for (file in self$input_files) {
+                cmd <- paste("cp -r", file, paste0(private$base_dir, "/input"))
+                system(cmd)
+            }
         }
     ),
     private = list(
