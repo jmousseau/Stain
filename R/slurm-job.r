@@ -3,25 +3,44 @@
 #' An interface to SLURM bash scripts and their submissions.
 SlurmJob <- R6::R6Class("SlurmJob",
     public = list(
-        main_file = NULL,
         params = list(),
-        initialize = function(main_file, source_files = list()) {
+        initialize = function(main_file, container_location = ".", source_files = list()) {
             if (!missing(main_file)) {
-                self$main_file <- main_file
+                private$main_file <- main_file
                 private$source_files <- source_files
+                private$base_dir <- container_location
 
                 private$find_globals()
             } else {
                 stop("A file containing a main() function must be provided.")
             }
+        },
+        create = function() {
+            for (param in names(self$params)) {
+                if (is.na(self$params[[param]])) {
+                    message(paste0("`", param, "` "), appendLF = FALSE)
+                    stop("is NA. Must be specified.")
+                }
+            }
+
+            private$generate_container()
+            objects_dir <- paste(private$base_dir, ".objects", sep = "/")
+
+            for (param in names(self$params)) {
+                value <- self$params[[param]]
+                rdata <- paste(objects_dir, paste0(param, ".RData"), sep = "/")
+                save(value, file = rdata)
+            }
         }
     ),
     private = list(
         globals = list(),
+        main_file = NULL,
         source_files = list(),
+        base_dir = ".",
         find_globals = function() {
             e <- new.env()
-            source_file(self$main_file, e)
+            source_file(private$main_file, e)
 
             for (file in private$source_files) {
                 source_file(file, e)
@@ -61,6 +80,14 @@ SlurmJob <- R6::R6Class("SlurmJob",
 
             private$globals = global_list
             self$params = global_list
+        },
+        generate_container = function() {
+            private$base_dir <- paste0(private$base_dir, "/job")
+            bd <- paste0(private$base_dir, "/")
+            dir.create(paste0(bd, "input"), recursive = TRUE, showWarnings = FALSE)
+            dir.create(paste0(bd, "output"), recursive = TRUE, showWarnings = FALSE)
+            dir.create(paste0(bd, ".objects"), recursive = TRUE, showWarnings = FALSE)
+
         }
     )
 )
