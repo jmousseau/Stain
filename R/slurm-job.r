@@ -31,6 +31,12 @@ SlurmJob <- R6::R6Class("SlurmJob",
                 rdata <- paste(objects_dir, paste0(param, ".RData"), sep = "/")
                 save(value, file = rdata)
             }
+
+            # Copy source files to sources directory
+            for (file in private$source_files) {
+                cmd <- paste("cp -r", file, paste0(private$base_dir, "/sources"))
+                system(cmd)
+            }
         }
     ),
     private = list(
@@ -86,6 +92,7 @@ SlurmJob <- R6::R6Class("SlurmJob",
             bd <- paste0(private$base_dir, "/")
             dir.create(paste0(bd, "input"), recursive = TRUE, showWarnings = FALSE)
             dir.create(paste0(bd, "output"), recursive = TRUE, showWarnings = FALSE)
+            dir.create(paste0(bd, "sources"), recursive = TRUE, showWarnings = FALSE)
             dir.create(paste0(bd, ".objects"), recursive = TRUE, showWarnings = FALSE)
 
         }
