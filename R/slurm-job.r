@@ -38,6 +38,8 @@ SlurmJob <- R6::R6Class("SlurmJob",
                 system(paste("rm -rf", container$dir))
                 stop(e)
             })
+
+            script <- SlurmBashScript$new(container, main_file)
         }
     ),
     private = list(
