@@ -8,7 +8,8 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
         dir = NULL,
         initialize = function(dir = ".") {
             name <- paste0("job_", private$rand_alphanumeric())
-            dir <- paste(dir, name, sep = "/")
+            dir <- paste(getwd(), dir, name, sep = "/")
+            self$dir <- dir
 
             for (sub_dir in c("/input", "/ouput", "/sources", "/.objects")) {
                 dir.create(paste0(dir, sub_dir), recursive = TRUE,
