@@ -5,20 +5,16 @@ SlurmJob <- R6::R6Class("SlurmJob",
     public = list(
         container = NULL,
         params = list(),
+        main_file = NULL,
         input_files = list(),
+        source_files = list(),
         initialize = function(main_file, container_location = ".", source_files = list()) {
             if (!missing(main_file)) {
-                private$main_file <- main_file
+                self$main_file <- main_file
 
-                for (file in source_files) {
-                    if (!file.exists(file)) {
-                        warning("Source file does not exist.")
-                    }
-                }
+                self$source_files <- source_files
 
-                private$source_files <- source_files
                 private$base_dir <- container_location
-
                 private$find_globals()
             } else {
                 stop("A file containing a main() function must be provided.")
@@ -32,7 +28,7 @@ SlurmJob <- R6::R6Class("SlurmJob",
                     container$add_object(name, self$params[[name]])
                 }
 
-                for (file in private$source_files) {
+                for (file in self$source_files) {
                     container$add_source(file)
                 }
 
@@ -49,14 +45,12 @@ SlurmJob <- R6::R6Class("SlurmJob",
     ),
     private = list(
         globals = list(),
-        main_file = NULL,
-        source_files = list(),
         base_dir = ".",
         find_globals = function() {
             e <- new.env()
-            source_file(private$main_file, e)
+            source_file(self$main_file, e)
 
-            for (file in private$source_files) {
+            for (file in self$source_files) {
                 source_file(file, e)
             }
 
