@@ -7,6 +7,13 @@ SlurmJob <- R6::R6Class("SlurmJob",
         initialize = function(main_file, container_location = ".", source_files = list()) {
             if (!missing(main_file)) {
                 private$main_file <- main_file
+
+                for (file in source_files) {
+                    if (!file.exists(file)) {
+                        stop("Source file does not exist.")
+                    }
+                }
+
                 private$source_files <- source_files
                 private$base_dir <- container_location
 
