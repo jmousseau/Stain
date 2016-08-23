@@ -3,7 +3,6 @@
 #' An interface to SLURM bash scripts and their submissions.
 SlurmJob <- R6::R6Class("SlurmJob",
     public = list(
-        container = NULL,
         params = list(),
         main_file = NULL,
         input_files = list(),
@@ -35,8 +34,6 @@ SlurmJob <- R6::R6Class("SlurmJob",
                 for (file in self$input_files) {
                     container$add_input(file)
                 }
-
-                self$container <- container
             }, error = function(e) {
                 system(paste("rm -rf", container$dir))
                 stop(e)
