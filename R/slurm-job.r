@@ -4,13 +4,14 @@
 SlurmJob <- R6::R6Class("SlurmJob",
     public = list(
         params = list(),
+        input_files = list(),
         initialize = function(main_file, container_location = ".", source_files = list()) {
             if (!missing(main_file)) {
                 private$main_file <- main_file
 
                 for (file in source_files) {
                     if (!file.exists(file)) {
-                        stop("Source file does not exist.")
+                        warning("Source file does not exist.")
                     }
                 }
 
@@ -21,6 +22,15 @@ SlurmJob <- R6::R6Class("SlurmJob",
             } else {
                 stop("A file containing a main() function must be provided.")
             }
+        },
+        add_input_files = function(files) {
+            for (file in c(files)) {
+                if (!file.exists(file)) {
+                    warning("Input file does not exist.")
+                }
+            }
+
+            input_files <- c(input_files, files)
         },
         create = function() {
             for (param in names(self$params)) {
