@@ -24,15 +24,6 @@ SlurmJob <- R6::R6Class("SlurmJob",
                 stop("A file containing a main() function must be provided.")
             }
         },
-        add_input_files = function(files) {
-            for (file in c(files)) {
-                if (!file.exists(file)) {
-                    warning("Input file does not exist.")
-                }
-            }
-
-            input_files <- c(input_files, files)
-        },
         create = function() {
             container <- SlurmContainer$new(private$base_dir)
 
