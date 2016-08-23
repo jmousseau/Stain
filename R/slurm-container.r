@@ -19,11 +19,11 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
         add_object = function(name, value) {
             obj_dir <- paste0(self$dir, "/.objects")
             rdata <- paste0(name, ".Rdata")
-            save(value, paste(obj_dir, rdata, sep = "/"))
+            save(value, file = paste(obj_dir, rdata, sep = "/"))
         },
         add_source = function(file) {
             if (file.exists(file)) {
-                source_dir <- paste0(self$dir, "/source")
+                source_dir <- paste0(self$dir, "/sources")
                 system(paste("cp", file, source_dir))
             } else {
                 warning("Source file does not exist.")
