@@ -34,21 +34,26 @@ SlurmJob <- R6::R6Class("SlurmJob",
             input_files <- c(input_files, files)
         },
         create = function() {
-            container <- SlurmContainer$new(container_location)
+            container <- SlurmContainer$new(private$base_dir)
 
-            for (name in names(self$params)) {
-                container$add_object(name, self$params[[name]])
-            }
+            tryCatch({
+                for (name in names(self$params)) {
+                    container$add_object(name, self$params[[name]])
+                }
 
-            for (file in private$source_files) {
-                container$add_source(file)
-            }
+                for (file in private$source_files) {
+                    container$add_source(file)
+                }
 
-            for (file in self$input_files) {
-                container$add_input(file)
-            }
+                for (file in self$input_files) {
+                    container$add_input(file)
+                }
 
-            self$container <- container
+                self$container <- container
+            }, error = function(e) {
+                system(paste("rm -rf", container$dir))
+                stop(e)
+            })
         }
     ),
     private = list(
