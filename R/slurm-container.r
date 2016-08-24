@@ -20,7 +20,9 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
             if (!is.na(value)) {
                 obj_dir <- paste0(self$dir, "/.objects")
                 rdata <- paste0(name, ".Rdata")
-                save(value, file = paste(obj_dir, rdata, sep = "/"))
+                e <- new.env()
+                e[[name]] <- value
+                save(list = name, envir = e, file = paste(obj_dir, rdata, sep = "/"))
             } else {
                 stop("Object must have an non NA value.")
             }
