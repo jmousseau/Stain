@@ -4,10 +4,10 @@
 #' the `sbatch` command.
 SlurmBashScript <- R6::R6Class("SlurmBashScript",
     public = list(
-        initialize = function(container, main_file, copy_back = c("*")) {
+        initialize = function(container, main_file) {
             private$cat_main_file_magic(container$dir, main_file)
             private$write_slurm_script(container$dir)
-            private$write_submit_script(container$dir, main_file, copy_back)
+            private$write_submit_script(container$dir, main_file)
         }
     ),
     private = list(
@@ -44,17 +44,14 @@ main_file=$(basename $1)
 
 R CMD BATCH ./sources/$main_file
 
-for i in ${@:2}
-do
-cp -r $i $SLURM_SUBMIT_DIR/output
-done
-
-cp -r './$1out' $SLURM_SUBMIT_DIR/output"
+cp -r * $SLURM_SUBMIT_DIR/output
+cd $SLURM_SUBMIT_DIR/output
+rm -rf ./input ./sources ./objects"
 
             write(contents, file = paste(dir, ".static.slurm", sep = "/"))
         },
-        write_submit_script = function(dir, main_file, copy_back) {
-            contents <- paste("#!/bin/bash\nsbatch ./.static.slurm", main_file, copy_back)
+        write_submit_script = function(dir, main_file) {
+            contents <- paste("#!/bin/bash\nsbatch ./.static.slurm", main_file)
             write(contents, file = paste(dir, "submit.sh", sep = "/"))
         }
     )
