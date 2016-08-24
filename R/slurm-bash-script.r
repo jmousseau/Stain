@@ -22,8 +22,7 @@ SlurmBashScript <- R6::R6Class("SlurmBashScript",
             cat(sourcing, loading, running_main, file = file, append = TRUE, sep = "\n")
         },
         write_slurm_script = function(dir) {
-            contents <- "
-#!/bin/bash
+            contents <- "#!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=12
 #SBATCH --time=0:10:00
