@@ -10,3 +10,4 @@ Imports:
     R6
 License: MIT
 LazyData: TRUE
+RoxygenNote: 5.0.1
