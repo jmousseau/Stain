@@ -40,7 +40,9 @@ module load pandoc
 # Flatten input directory
 mv -r ./input .
 
-R CMD BATCH ./sources/$1
+main_file=$(basename $1)
+
+R CMD BATCH ./sources/$main_file
 
 for i in ${@:2}
 do
