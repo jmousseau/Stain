@@ -19,7 +19,7 @@ SlurmSettings <- R6::R6Class("SlurmSettings",
             self$time <- time
             self$memory <- memory
 
-            if (!is.na(self$mail_to) && !is.na(self$mail_type)) {
+            if (!is.na(mail_to) && !is.na(mail_type)) {
                 self$mail_to <- mail_to
                 self$mail_type <- mail_type
             }
@@ -42,7 +42,7 @@ SlurmSettings <- R6::R6Class("SlurmSettings",
                 comments <- paste(comments, sb_mail_type, sb_mail_to, sep = "\n")
             }
 
-            return(commments)
+            return(comments)
         }
     )
 )
