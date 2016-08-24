@@ -13,9 +13,8 @@ SlurmBashScript <- R6::R6Class("SlurmBashScript",
     private = list(
         cat_main_file_magic = function(dir, main_file) {
             file <- paste(dir, "sources", basename(main_file), sep = "/")
-            sourcing <- paste("sapply(list.files('./sources')[!(",
-                              paste0("'", main_file, "'"),
-                              "%in% list.files('./sources'))], source)")
+            sourcing <- paste("sapply(list.files('./sources', full.names = TRUE)[!(list.files('./sources')) %in%",
+                              paste0("'", basename(main_file), "'"), "], source)")
             loading <- paste("sapply(list.files('./.objects'), load)")
             running_main <- "main()"
 
