@@ -4,13 +4,16 @@
 #' the `sbatch` command.
 SlurmBashScript <- R6::R6Class("SlurmBashScript",
     public = list(
-        initialize = function(container, main_file) {
+        initialize = function(container, main_file, settings) {
+            private$settings <- settings
+
             private$cat_main_file_magic(container$dir, main_file)
             private$write_slurm_script(container$dir)
             private$write_submit_script(container$dir, main_file)
         }
     ),
     private = list(
+        settings = NA,
         cat_main_file_magic = function(dir, main_file) {
             file <- paste(dir, "sources", basename(main_file), sep = "/")
             sourcing <- paste("sapply(list.files('./sources', full.names = TRUE)[!(list.files('./sources')) %in%",
@@ -22,14 +25,8 @@ SlurmBashScript <- R6::R6Class("SlurmBashScript",
             cat(sourcing, loading, running_main, file = file, append = TRUE, sep = "\n")
         },
         write_slurm_script = function(dir) {
-            contents <- "#!/bin/bash
-#SBATCH --nodes=1
-#SBATCH --cpus-per-task=12
-#SBATCH --time=0:10:00
-#SBATCH --mem=16g
-#SBATCH -o R_job.o%j
-
-
+            header <- paste("#!/bin/bash", private$settings$sbatch_comments(), sep = "\n")
+            contents <- "
 # copy necessary files over
 cp -r ./sources ./input ./.objects $PFSDIR
 cd $PFSDIR
@@ -48,7 +45,8 @@ cp -r * $SLURM_SUBMIT_DIR/output
 cd $SLURM_SUBMIT_DIR/output
 rm -rf ./input ./sources ./objects"
 
-            write(contents, file = paste(dir, ".static.slurm", sep = "/"))
+            write(paste(header, contents, sep = "\n"),
+                  file = paste(dir, ".static.slurm", sep = "/"))
         },
         write_submit_script = function(dir, main_file) {
             contents <- paste("#!/bin/bash\nsbatch ./.static.slurm", main_file)

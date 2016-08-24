@@ -9,7 +9,9 @@ SlurmJob <- R6::R6Class("SlurmJob",
         main_file = NULL,
         input_files = list(),
         source_files = list(),
-        initialize = function(main_file, container_location = ".", source_files = list()) {
+        initialize = function(main_file, container_location = ".",
+                              source_files = list(),
+                              settings = SlurmSettings$new()) {
             if (!missing(main_file)) {
                 self$main_file <- main_file
 
@@ -17,6 +19,7 @@ SlurmJob <- R6::R6Class("SlurmJob",
 
                 private$base_dir <- container_location
                 private$find_globals()
+                private$settings <- settings
             } else {
                 stop("A file containing a main() function must be provided.")
             }
@@ -41,12 +44,13 @@ SlurmJob <- R6::R6Class("SlurmJob",
                 stop(e)
             })
 
-            script <- SlurmBashScript$new(container, self$main_file)
+            script <- SlurmBashScript$new(container, self$main_file, private$settings)
         }
     ),
     private = list(
         globals = list(),
         base_dir = ".",
+        settings = NA,
         find_globals = function() {
             e <- new.env()
             testthat::source_file(self$main_file, e)
