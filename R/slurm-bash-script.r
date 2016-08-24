@@ -5,11 +5,22 @@
 SlurmBashScript <- R6::R6Class("SlurmBashScript",
     public = list(
         initialize = function(container, main_file, copy_back = c("*")) {
+            private$cat_main_file_magic(container$dir, main_file)
             private$write_slurm_script(container$dir)
-            private$write_slurm_script(container$dir, main_file, copy_back)
+            private$write_submit_script(container$dir, main_file, copy_back)
         }
     ),
     private = list(
+        cat_main_file_magic = function(dir, main_file) {
+            file <- paste(dir, "sources", basename(main_file), sep = "/")
+            sourcing <- paste("sapply(list.files('./sources')[!(",
+                              paste0("'", main_file, "'"),
+                              "%in% list.files('./sources'))], source)")
+            loading <- paste("sapply(list.files('./.objects'), load)")
+            running_main <- "main()"
+
+            cat(sourcing, loading, running_main, file = file, append = TRUE, sep = "\n")
+        },
         write_slurm_script = function(dir) {
             contents <- "
 #!/bin/bash
@@ -21,7 +32,7 @@ SlurmBashScript <- R6::R6Class("SlurmBashScript",
 
 
 # copy necessary files over
-cp -r ./source ./input ./.objects $PFSDIR
+cp -r ./sources ./input ./.objects $PFSDIR
 cd $PFSDIR
 
 module load hpc-ods
