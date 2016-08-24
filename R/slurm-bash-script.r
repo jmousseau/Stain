@@ -49,7 +49,7 @@ cp -r './$1out' $SLURM_SUBMIT_DIR/output"
             write(contents, file = paste(dir, ".static.slurm", sep = "/"))
         },
         write_submit_script = function(dir, main_file, copy_back) {
-            contents <- paste("sbatch ./.static.slurm", main_file, copy_back)
+            contents <- paste("#!/bin/bash\nsbatch ./.static.slurm", main_file, copy_back)
             write(contents, file = paste(dir, "submit.sh", sep = "/"))
         }
     )
