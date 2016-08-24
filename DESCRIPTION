@@ -5,8 +5,7 @@ Version: 0.0.0
 Authors@R: as.person("Jack Mousseau <mousseau@case.edu> [cre]")
 Description: Submit SLURM jobs to Case Western Reserve's HPC cluster.
 Imports:
-    codetools
-Suggests:
+    codetools,
     testthat
 License: MIT
 LazyData: TRUE

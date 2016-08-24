@@ -47,10 +47,10 @@ SlurmJob <- R6::R6Class("SlurmJob",
         base_dir = ".",
         find_globals = function() {
             e <- new.env()
-            source_file(self$main_file, e)
+            testthat::source_file(self$main_file, e)
 
             for (file in self$source_files) {
-                source_file(file, e)
+                testthat::source_file(file, e)
             }
 
             globals <- codetools::findGlobals(e$main)
