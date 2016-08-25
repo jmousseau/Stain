@@ -26,6 +26,25 @@ sbatch_opts_equal <- function(opt_1, opt_2) {
 }
 
 
+#' Insert an sbatch option into a set.
+#'
+#' @param opt The sbatch option to insert
+#'
+#' @param opts A set of sbatch options. Default value is the empty
+#' set.
+#'
+#' @return A set with \code{opt} inserted.
+sbatch_opts_insert <- function(opt, opts = c()) {
+    for (i in 1:length(opts)) {
+        if (sbatch_opts_equal(opt, opts[i])) {
+            opts[i] = opt
+        }
+    }
+
+    return(opts)
+}
+
+
 #' Get the key of an sbatch.
 #'
 #' @param opt An sbatch option string.
