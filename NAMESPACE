@@ -2,3 +2,5 @@
 
 export(SlurmJob)
 export(SlurmSettings)
+export(sbatch_mail_types)
+export(sbatch_opts)
