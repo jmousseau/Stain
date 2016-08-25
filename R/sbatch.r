@@ -11,6 +11,31 @@ sbatch_opt <- function(key) {
 }
 
 
+#' Test sbatch options for equality.
+#'
+#' sbatch option equallity is achieved if the keys of the options
+#' are the same.
+#'
+#' @param opt_1 An sbatch option string.
+#'
+#' @param opt_2 An sbatch option string.
+#'
+#' @return A boolean value.
+sbatch_opts_equal <- function(opt_1, opt_2) {
+    return(sbatch_opt_key(opt_1) == sbatch_opt_key(opt_2))
+}
+
+
+#' Get the key of an sbatch.
+#'
+#' @param opt An sbatch option string.
+#'
+#' @return The \code{opt}'s key.
+sbatch_opt_key <- function(opt) {
+    return(strsplit(opt, "=")[[1]][1])
+}
+
+
 #' A list of sbatch options.
 #'
 #' The value of each item in the list is a string or a function
