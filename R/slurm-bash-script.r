@@ -33,9 +33,6 @@ cd $PFSDIR
 module load hpc-ods
 module load pandoc
 
-# Flatten input directory
-mv -r ./input .
-
 main_file=$(basename $1)
 
 R CMD BATCH ./sources/$main_file
