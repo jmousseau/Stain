@@ -35,10 +35,17 @@ sbatch_opts_equal <- function(opt_1, opt_2) {
 #'
 #' @return A set with \code{opt} inserted.
 sbatch_opts_insert <- function(opt, opts = c()) {
+    did_set <- FALSE
+
     for (i in 1:length(opts)) {
         if (sbatch_opts_equal(opt, opts[i])) {
             opts[i] = opt
+            did_set = TRUE
         }
+    }
+
+    if(!did_set) {
+        opts <- c(opts, opt)
     }
 
     return(opts)
