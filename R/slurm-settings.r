@@ -22,6 +22,15 @@ SlurmSettings <- R6::R6Class("SlurmSettings",
             }
 
             return(line)
+        },
+        for_slurm_script = function() {
+            comments <- "#!/bin/bash"
+
+            for (opt in self$options) {
+                comments <- paste(comments, paste("#SBATCH", opt), sep = "\n")
+            }
+
+            return(comments)
         }
     )
 )

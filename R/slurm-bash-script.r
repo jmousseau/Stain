@@ -25,7 +25,7 @@ SlurmBashScript <- R6::R6Class("SlurmBashScript",
             cat(sourcing, loading, running_main, file = file, append = TRUE, sep = "\n")
         },
         write_slurm_script = function(dir) {
-            contents <- "#!/bin/bash
+            contents <- "
 # copy necessary files over
 cp -r ./sources ./input ./.objects $PFSDIR
 cd $PFSDIR
@@ -44,10 +44,11 @@ cp -r * $SLURM_SUBMIT_DIR/output
 cd $SLURM_SUBMIT_DIR/output
 rm -rf ./input ./sources ./objects"
 
-            write(contents, file = paste(dir, ".static.slurm", sep = "/"))
+            write(paste(private$settings$for_slurm_script(), contents, sep = "\n"),
+                  file = paste(dir, ".static.slurm", sep = "/"))
         },
         write_submit_script = function(dir, main_file) {
-            contents <- paste("#!/bin/bash\nsbatch ./.static.slurm", main_file, private$settings$for_command_line())
+            contents <- paste("#!/bin/bash\nsbatch ./.static.slurm", main_file)
             write(contents, file = paste(dir, "submit.sh", sep = "/"))
         }
     )
