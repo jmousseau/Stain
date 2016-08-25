@@ -78,10 +78,20 @@ SlurmJob <- R6::R6Class("SlurmJob",
             nglobals <- length(globals)
 
             if (nglobals > 0) {
-                message(paste("Found", nglobals, "parameter to specify:"))
-                message(globals)
-                message("Access these variables in the `params` property.")
-                message("If new source files are added, `params` will be updated.")
+                if (nglobals == 1) {
+                    vars <- "var"
+                    t_vars <- "this var"
+                } else {
+                    vars <- "vars"
+                    t_vars <- "these vars"
+                }
+
+                message(paste("Found", nglobals, vars, "to specify:"))
+                for (global in globals) {
+                    message(paste("    -", global))
+                }
+
+                message(paste("\nSet", t_vars, "in the `params` property."))
             }
 
             # Set the values of all gobals to NA
