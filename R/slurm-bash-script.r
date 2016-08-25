@@ -22,7 +22,7 @@ SlurmBashScript <- R6::R6Class("SlurmBashScript",
                              function(file) { load(file, env = .GlobalEnv) })")
             running_main <- "main()"
 
-            cat(sourcing, loading, running_main, file = file, append = TRUE, sep = "\n")
+            cat("\n\n", sourcing, loading, running_main, file = file, append = TRUE, sep = "\n")
         },
         write_slurm_script = function(dir) {
             contents <- "
