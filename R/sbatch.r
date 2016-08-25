@@ -75,7 +75,6 @@ sbatch_opt_key <- function(opt) {
 sbatch_opts <- list (
     begin = sbatch_opt("begin"),
     cpus_per_task = sbatch_opt("cpus-per-task"),
-    mail_type = sbatch_opt("mail-type"),
     mail_user = sbatch_opt("mail-user"),
     memory = sbatch_opt("mem"),
     nodes = sbatch_opt("nodes"),
@@ -90,16 +89,16 @@ sbatch_opts <- list (
 #' a mail type option.
 #'
 #' @export
-sbatch_mail_types <- list(
-    all = "ALL",
-    begin = "BEGIN",
-    end = "END",
-    fail = "FAIL",
-    none = "NONE",
-    requeue = "REQUEUE",
-    stage_out = "STAGE_OUT",
-    time_limit = "TIME_LIMIT",
-    time_limit_90 = "TIME_LIMIT_90",
-    time_limit_80 = "TIME_LIMIT_80",
-    time_limit_50 = "TIME_LIMIT_50"
+sbatch_mail_type_opts <- list(
+    all = sbatch_opt("mail-type")("ALL"),
+    begin = sbatch_opt("mail-type")("BEGIN"),
+    end = sbatch_opt("mail-type")("END"),
+    fail = sbatch_opt("mail-type")("FAIL"),
+    none = sbatch_opt("mail-type")("NONE"),
+    requeue = sbatch_opt("mail-type")("REQUEUE"),
+    stage_out = sbatch_opt("mail-type")("STAGE_OUT"),
+    time_limit = sbatch_opt("mail-type")("TIME_LIMIT"),
+    time_limit_90 = sbatch_opt("mail-type")("TIME_LIMIT_90"),
+    time_limit_80 = sbatch_opt("mail-type")("TIME_LIMIT_80"),
+    time_limit_50 = sbatch_opt("mail-type")("TIME_LIMIT_50")
 )
