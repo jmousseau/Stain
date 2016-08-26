@@ -1,9 +1,9 @@
 Package: Stain
 Type: Package
 Title: Submit SLURM Jobs
-Version: 0.3.1
+Version: 0.4.0
 Authors@R: as.person("Jack Mousseau <mousseau@case.edu> [cre]")
-Description: Submit SLURM jobs to Case Western Reserve's HPC cluster.
+Description: Create "containers" for your slurm jobs.
 Imports:
     codetools,
     testthat,
