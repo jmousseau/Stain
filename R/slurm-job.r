@@ -24,7 +24,12 @@ SlurmJob <- R6::R6Class("SlurmJob",
                 stop("A file containing a main() function must be provided.")
             }
         },
-        create = function() {
+        create = function(allow_creation_without_input_files = FALSE) {
+
+            if (!allow_creation_without_input_files && length(self$input_files) == 0) {
+                stop("Attempting to create slurm job without `input_files`. Pass TRUE to `create` to override.")
+            }
+
             container <- SlurmContainer$new(private$base_dir)
 
             tryCatch({
