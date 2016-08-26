@@ -7,6 +7,8 @@ SlurmBashScript <- R6::R6Class("SlurmBashScript",
         initialize = function(container, main_file, settings) {
             private$settings <- settings
 
+            main_file <- paste0("cp_of_", main_file)
+
             private$cat_main_file_magic(container$dir, main_file)
             private$write_slurm_script(container$dir)
             private$write_submit_script(container$dir, main_file)
@@ -15,9 +17,10 @@ SlurmBashScript <- R6::R6Class("SlurmBashScript",
     private = list(
         settings = NA,
         cat_main_file_magic = function(dir, main_file) {
-            file <- paste(dir, "sources", basename(main_file), sep = "/")
+            main_file <- paste0("cp_of_", basename(main_file))
+            file <- paste(dir, "sources", main_file, sep = "/")
             sourcing <- paste("sapply(list.files('./sources', full.names = TRUE)[!(list.files('./sources')) %in%",
-                              paste0("'", basename(main_file), "'"), "], source)")
+                              paste0("'", main_file, "'"), "], source)")
             loading <- paste("sapply(list.files('./.objects', full.names = TRUE),
                              function(file) { load(file, env = .GlobalEnv) })")
             running_main <- "main()"

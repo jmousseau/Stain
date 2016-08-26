@@ -30,7 +30,8 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
         add_source = function(file) {
             if (file.exists(file)) {
                 source_dir <- paste0(self$dir, "/sources")
-                system(paste("cp -r", file, source_dir))
+                destination <- paste0(source_dir, paste0("/cp_of_", basename(file)))
+                system(paste("cp -r", file, destination))
             } else {
                 stop("Source file does not exist.")
             }
@@ -38,7 +39,8 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
         add_input = function(file) {
             if (file.exists(file)) {
                 input_dir <- paste0(self$dir, "/input")
-                system(paste("cp -r", file, input_dir))
+                destination <- paste0(input_dir, paste0("/cp_of_", basename(file)))
+                system(paste("cp -r", file, destination))
             } else {
                 stop("Source file does not exist.")
             }
