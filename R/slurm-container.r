@@ -17,7 +17,13 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
             }
         },
         add_object = function(name, value) {
-            if (!is.na(value)) {
+            if (length(value) > 1) {
+                is_na <- FALSE
+            } else {
+                is_na <- is.na(value)
+            }
+
+            if (!is_na) {
                 obj_dir <- paste0(self$dir, "/.objects")
                 rdata <- paste0(name, ".Rdata")
                 e <- new.env()
