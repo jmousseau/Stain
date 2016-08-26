@@ -4,7 +4,7 @@
 \alias{submit_jobs}
 \title{Submit one or more slurm jobs.}
 \usage{
-submit_jobs(dir)
+submit_jobs(jobs)
 }
 \arguments{
 \item{jobs}{The \code{job_<alphanumeric>/} directories for
