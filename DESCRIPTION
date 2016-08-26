@@ -1,4 +1,4 @@
-Package: slurm
+Package: Stain
 Type: Package
 Title: Submit SLURM Jobs
 Version: 0.3.1

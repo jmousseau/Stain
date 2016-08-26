@@ -1,15 +1,15 @@
-# slurm
+# Stain
 
 ![](https://img.shields.io/badge/release-v0.3.0-red.svg?style=flat)
 
-`slurm` is an R package that generates "containers" for slurm jobs. **NOTE**:
-still in beta!
+`Stain` (**S**lurm Con**tain**er) is an R package that generates "containers" 
+for slurm jobs. **NOTE**: still in beta!
 
 
 ### Installation
 
 ```R
-devtools::install_github("jmousseau/slurm")
+devtools::install_github("jmousseau/Stain")
 ```
 
 ---
@@ -40,7 +40,7 @@ options. `sbatch_opts` is a list of supported option functions that take
 a single parameter, representing the option's value. Any required `sbatch`
 options that are not specified will take on default values.
 
-Then use the `settings` object to create a `SlurmJob` object which is `slurm`'s
+Then use the `settings` object to create a `SlurmJob` object which is `Stain`'s
 core component. Most importantly, the  `main_file` parameter must
 contain a `main` function that takes no parameters.
 
