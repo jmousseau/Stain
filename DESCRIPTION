@@ -1,7 +1,7 @@
 Package: Stain
 Type: Package
 Title: Submit SLURM Jobs
-Version: 0.4.0
+Version: 0.4.1
 Authors@R: as.person("Jack Mousseau <mousseau@case.edu> [cre]")
 Description: Create "containers" for your slurm jobs.
 Imports:
