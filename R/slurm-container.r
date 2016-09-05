@@ -7,7 +7,7 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
     public = list(
         dir = NULL,
         initialize = function(dir = ".") {
-            sub_dirs <- c("/input", "/output", "/sources", "/objects")
+            sub_dirs <- c("/data", "/output", "/sources", "/objects")
 
             is_stain <- Reduce("&", sub_dirs %in% list.dirs(dir))
             if (!is_stain) {
@@ -48,10 +48,10 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
                 stop("Source file does not exist.")
             }
         },
-        add_input = function(file) {
+        add_data = function(file) {
             if (file.exists(file)) {
-                input_dir <- paste0(self$dir, "/.stain/input")
-                destination <- paste0(input_dir, paste0("/cp_of_", basename(file)))
+                data_dir <- paste0(self$dir, "/.stain/data")
+                destination <- paste0(data, paste0("/cp_of_", basename(file)))
                 system(paste("cp -r", file, destination))
             } else {
                 stop("Source file does not exist.")
