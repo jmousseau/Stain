@@ -61,6 +61,13 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
         },
         remove_data = function(basename) {
             private$remove_file(file, "data")
+        },
+        get_files = function() {
+            return(list(
+                data = list.files(paste(self$dir, ".stain", "data", sep = "/")),
+                objects = list.files(paste(self$dir, ".stain", "objects", sep = "/")),
+                sources = list.files(paste(self$dir, ".stain", "sources", sep = "/"))
+            ))
         }
     ),
     private = list(
