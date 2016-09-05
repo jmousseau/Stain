@@ -123,8 +123,8 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
             }
         },
         update_globals = function() {
-            source_files <- list.files(paste0(self$dir, ".stain/sources"), full.names = TRUE)
-            object_files <- list.files(paste0(self$dir, ".stain/objects"), full.names = TRUE)
+            source_files <- list.files(paste0(self$dir, "/.stain/sources"), full.names = TRUE)
+            object_files <- list.files(paste0(self$dir, "/.stain/objects"), full.names = TRUE)
 
             globals <- find_globals(source_files)
 
