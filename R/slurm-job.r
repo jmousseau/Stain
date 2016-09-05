@@ -1,8 +1,6 @@
 #' SlurmJob R6 object.
 #'
-#' An interface to SLURM bash scripts and their submissions.
-#'
-#' @export
+#' A wrapper around SlurmContainer objects.
 SlurmJob <- R6::R6Class("SlurmJob",
     public = list(
         params = list(),
