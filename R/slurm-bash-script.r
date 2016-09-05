@@ -32,6 +32,9 @@ SlurmBashScript <- R6::R6Class("SlurmBashScript",
 cp -r ./.stain $PFSDIR
 cd $PFSDIR
 
+mkdir .data
+mv ./.stain/data/* ./.data
+
 module load hpc-ods
 module load pandoc
 
