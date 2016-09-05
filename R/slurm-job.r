@@ -40,7 +40,7 @@ SlurmJob <- R6::R6Class("SlurmJob",
                 container$add_sources(c(self$source_files, self$main_file))
                 container$add_data(self$data_files)
             }, error = function(e) {
-                system(paste("rm -rf", container$dir))
+                container$delete(TRUE)
                 stop(e)
             })
 
