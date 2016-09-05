@@ -42,26 +42,33 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
                 stop("Object must have an non NA value.")
             }
         },
+        remove_object = function(name) {
+            private$remove_file(paste0(name, ".RData"), "objects")
+        },
         add_source = function(file) {
-            if (file.exists(file)) {
-                source_dir <- paste0(self$dir, "/.stain/sources")
-                destination <- paste0(source_dir, paste0("/cp_of_", basename(file)))
-                system(paste("cp -r", file, destination))
-            } else {
-                stop("Source file does not exist.")
-            }
+            private$add_file(file, "sources")
+        },
+        remove_source = function(basename) {
+            private$remove_file(file, "sources")
         },
         add_data = function(file) {
-            if (file.exists(file)) {
-                data_dir <- paste0(self$dir, "/.stain/data")
-                destination <- paste0(data, paste0("/cp_of_", basename(file)))
-                system(paste("cp -r", file, destination))
-            } else {
-                stop("Source file does not exist.")
-            }
+            private$add_file(file, "data")
+        },
+        remove_data = function(basename) {
+            private$remove_file(file, "data")
         }
     ),
     private = list(
+        add_file = function(file, stain_sub_dir) {
+            if (!file.exists(file)) { stop("File does not exist.") }
+            dir <- paste(self$dir, ".stain", stain_sub_dir, sep = "/")
+            file.copy(file, dir, recursive = TRUE)
+        },
+        remove_file = function(file, stain_sub_dir) {
+            if (!file.exists(file)) { stop("File does not exist.") }
+            file <- paste(self$dir, ".stain", stain_sub_dir, file, sep = "/")
+            file.remove(file)
+        },
         rand_alphanumeric = function(len = 3) {
             population <- c(rep(0:9, each = 5), LETTERS, letters)
             samp <- sample(population, len, replace = TRUE)
