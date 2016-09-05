@@ -13,10 +13,12 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
 
             is_stain <- Reduce("&", sub_dirs %in% sapply(list.dirs(stain_dir), basename))
             if (is_stain && dir.exists(stain_dir)) {
+                self$dir <- dir
                 private$update_globals()
             } else {
                 name <- paste0("job_", private$rand_alphanumeric())
                 dir <- paste(getwd(), dir, name, sep = "/")
+                self$dir <- dir
 
                 for (sub_dir in sub_dirs) {
                     dir.create(paste(dir, ".stain", sub_dir, sep = "/"),
@@ -26,8 +28,6 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
                 dir.create(paste0(dir, "/output"), recursive = TRUE,
                             showWarnings = FALSE)
             }
-
-            self$dir <- dir
         },
         add_object = function(name, value) {
             if (length(value) > 1) {
