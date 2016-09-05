@@ -8,17 +8,11 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
         dir = NULL,
         globals = list(),
         initialize = function(dir = ".") {
-            self$dir <- dir
-
             sub_dirs <- c("data", "sources", "objects")
             stain_dir <- paste0(dir, ".stain")
 
-            if (!dir.exists(stain_dir)) {
-                return()
-            }
-
             is_stain <- Reduce("&", sub_dirs %in% sapply(list.dirs(stain_dir), basename))
-            if (is_stain) {
+            if (is_stain && dir.exists(stain_dir)) {
                 private$update_globals()
             } else {
                 name <- paste0("job_", private$rand_alphanumeric())
@@ -32,6 +26,8 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
                 dir.create(paste0(dir, "/output"), recursive = TRUE,
                             showWarnings = FALSE)
             }
+
+            self$dir <- dir
         },
         add_object = function(name, value) {
             if (length(value) > 1) {
@@ -84,7 +80,7 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
             }
 
             for (file in files) {
-                file.copy(file, dir, recursive = TRUE)
+                file.copy(file, paste(dir, basename(file), sep = "/"), overwrite = TRUE)
             }
 
             private$update_globals()
