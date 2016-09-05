@@ -34,24 +34,12 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
 
             script <- SlurmBashScript$new(container$dir, self$settings)
         },
-        add_object = function(name, value) {
-            if (length(value) > 1) {
-                is_na <- FALSE
-            } else {
-                is_na <- is.na(value)
-            }
+        save_objects = function() {
+            private$clean_object_files()
 
-            if (!is_na) {
-                obj_dir <- paste0(self$dir, "/.stain/objects")
-                rdata <- paste0(name, ".Rdata")
-                e <- new.env()
-                e[[name]] <- value
-                save(list = name, envir = e, file = paste(obj_dir, rdata, sep = "/"))
-            } else {
-                stop("Object must have an non NA value.")
+            for (name in names(self$globals)) {
+                private$add_object(name, self$globals[[name]])
             }
-
-            private$update_globals()
         },
         remove_objects = function(names) {
             private$remove_files(paste0(names, ".RData"), "objects")
@@ -105,6 +93,25 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
             for (file in files) {
                 file <- paste(self$dir, ".stain", stain_sub_dir, file, sep = "/")
                 file.remove(file)
+            }
+
+            private$update_globals()
+        },
+        add_object = function(name, value) {
+            if (length(value) > 1) {
+                is_na <- FALSE
+            } else {
+                is_na <- is.na(value)
+            }
+
+            if (!is_na) {
+                obj_dir <- paste0(self$dir, "/.stain/objects")
+                rdata <- paste0(name, ".Rdata")
+                e <- new.env()
+                e[[name]] <- value
+                save(list = name, envir = e, file = paste(obj_dir, rdata, sep = "/"))
+            } else {
+                stop("Object must have an non NA value.")
             }
 
             private$update_globals()
