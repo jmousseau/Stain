@@ -7,7 +7,7 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
     public = list(
         dir = NULL,
         initialize = function(dir = ".") {
-            sub_dirs <- c("/data", "/output", "/sources", "/objects")
+            sub_dirs <- c("/data", "/sources", "/objects")
 
             is_stain <- Reduce("&", sub_dirs %in% list.dirs(dir))
             if (!is_stain) {
@@ -18,6 +18,9 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
                     dir.create(paste0(dir, "/.stain", sub_dir), recursive = TRUE,
                                showWarnings = FALSE)
                 }
+
+                dir.create(paste0(dir, "/output"), recursive = TRUE,
+                            showWarnings = FALSE)
             }
 
             self$dir <- dir
