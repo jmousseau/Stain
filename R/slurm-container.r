@@ -30,9 +30,8 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
 
                 dir.create(paste0(dir, "/output"), recursive = TRUE,
                             showWarnings = FALSE)
+                script <- SlurmBashScript$new(dir, self$settings)
             }
-
-            script <- SlurmBashScript$new(container$dir, self$settings)
         },
         save_objects = function() {
             private$clean_object_files()
