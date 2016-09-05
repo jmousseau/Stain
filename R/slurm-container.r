@@ -122,7 +122,7 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
             for (object_file in object_files) {
                 load(object_file, envir = e)
                 name <- strsplit(basename(object_file), "[.]")[[1]][1]
-                if (name %in% names(e) && name %in% names(globals)) {
+                if (name %in% names(e) && (name %in% names(globals) || length(globals) == 0)) {
                     globals[[name]] <- e[[name]]
                 }
             }
