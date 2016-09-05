@@ -108,12 +108,20 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
 
             globals <- find_globals(source_files)
 
+            # Check for the globals in the object files
             e <- new.env()
             for (object_file in object_files) {
                 load(object_file, envir = e)
                 name <- strsplit(basename(object_file), "[.]")[[1]][1]
-                if (name %in% names(e)) {
+                if (name %in% names(e) && name %in% names(globals)) {
                     globals[[name]] <- e[[name]]
+                }
+            }
+
+            # Copy over existing global values
+            for (name in names(self$globals)) {
+                if (name %in% names(globals)) {
+                    globals[[name]] <- self$globals[[name]]
                 }
             }
 
