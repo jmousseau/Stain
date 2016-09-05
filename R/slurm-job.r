@@ -44,7 +44,7 @@ SlurmJob <- R6::R6Class("SlurmJob",
                 stop(e)
             })
 
-            script <- SlurmBashScript$new(container, self$main_file, private$settings)
+            script <- SlurmBashScript$new(container, private$settings)
         }
     ),
     private = list(
