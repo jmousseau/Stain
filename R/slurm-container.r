@@ -7,7 +7,7 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
     public = list(
         dir = NULL,
         initialize = function(dir = ".") {
-            sub_dirs <- c("/input", "/output", "/sources", "/.objects")
+            sub_dirs <- c("/input", "/output", "/sources", "/objects")
 
             is_stain <- Reduce("&", sub_dirs %in% list.dirs(dir))
             if (!is_stain) {
@@ -15,7 +15,7 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
                 dir <- paste(getwd(), dir, name, sep = "/")
 
                 for (sub_dir in sub_dirs) {
-                    dir.create(paste0(dir, sub_dir), recursive = TRUE,
+                    dir.create(paste0(dir, "/.stain", sub_dir), recursive = TRUE,
                                showWarnings = FALSE)
                 }
             }
@@ -30,7 +30,7 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
             }
 
             if (!is_na) {
-                obj_dir <- paste0(self$dir, "/.objects")
+                obj_dir <- paste0(self$dir, "/.stain/objects")
                 rdata <- paste0(name, ".Rdata")
                 e <- new.env()
                 e[[name]] <- value
@@ -41,7 +41,7 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
         },
         add_source = function(file) {
             if (file.exists(file)) {
-                source_dir <- paste0(self$dir, "/sources")
+                source_dir <- paste0(self$dir, "/.stain/sources")
                 destination <- paste0(source_dir, paste0("/cp_of_", basename(file)))
                 system(paste("cp -r", file, destination))
             } else {
@@ -50,7 +50,7 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
         },
         add_input = function(file) {
             if (file.exists(file)) {
-                input_dir <- paste0(self$dir, "/input")
+                input_dir <- paste0(self$dir, "/.stain/input")
                 destination <- paste0(input_dir, paste0("/cp_of_", basename(file)))
                 system(paste("cp -r", file, destination))
             } else {

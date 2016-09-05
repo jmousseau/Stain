@@ -18,10 +18,10 @@ SlurmBashScript <- R6::R6Class("SlurmBashScript",
         settings = NA,
         cat_main_file_magic = function(dir, main_file) {
             main_file <- paste0("cp_of_", basename(main_file))
-            file <- paste(dir, "sources", main_file, sep = "/")
-            sourcing <- paste("sapply(list.files('./sources', full.names = TRUE)[!(list.files('./sources')) %in%",
+            file <- paste(dir, ".stain/sources", main_file, sep = "/")
+            sourcing <- paste("sapply(list.files('./.stain/sources', full.names = TRUE)[!(list.files('./sources')) %in%",
                               paste0("'", main_file, "'"), "], source)")
-            loading <- paste("sapply(list.files('./.objects', full.names = TRUE),
+            loading <- paste("sapply(list.files('./.stain/objects', full.names = TRUE),
                              function(file) { load(file, env = .GlobalEnv) })")
             running_main <- "main()"
 
@@ -30,7 +30,7 @@ SlurmBashScript <- R6::R6Class("SlurmBashScript",
         write_slurm_script = function(dir) {
             contents <- "
 # copy necessary files over
-cp -r ./sources ./input ./.objects $PFSDIR
+cp -r ./.stain $PFSDIR
 cd $PFSDIR
 
 module load hpc-ods
@@ -38,11 +38,9 @@ module load pandoc
 
 main_file=$(basename $1)
 
-R CMD BATCH ./sources/$main_file
+R CMD BATCH ./.stain/sources/$main_file
 
-cp -r * $SLURM_SUBMIT_DIR/output
-cd $SLURM_SUBMIT_DIR/output
-rm -rf ./input ./sources ./objects"
+cp -r * $SLURM_SUBMIT_DIR/output"
 
             write(paste(private$settings$for_slurm_script(), contents, sep = "\n"),
                   file = paste(dir, ".static.slurm", sep = "/"))
