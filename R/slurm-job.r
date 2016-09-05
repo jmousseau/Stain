@@ -37,13 +37,8 @@ SlurmJob <- R6::R6Class("SlurmJob",
                     container$add_object(name, self$params[[name]])
                 }
 
-                for (file in c(self$source_files, self$main_file)) {
-                    container$add_source(file)
-                }
-
-                for (file in self$data_files) {
-                    container$add_data(file)
-                }
+                container$add_sources(c(self$source_files, self$main_file))
+                container$add_data(self$data_files)
             }, error = function(e) {
                 system(paste("rm -rf", container$dir))
                 stop(e)
