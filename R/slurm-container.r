@@ -7,16 +7,16 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
     public = list(
         dir = NULL,
         initialize = function(dir = ".") {
-            sub_dirs <- c("/data", "/sources", "/objects")
+            sub_dirs <- c("data", "sources", "objects")
 
-            is_stain <- Reduce("&", sub_dirs %in% list.dirs(dir))
+            is_stain <- Reduce("&", sub_dirs %in% sapply(list.dirs(paste0(dir, ".stain")), basename))
             if (!is_stain) {
                 name <- paste0("job_", private$rand_alphanumeric())
                 dir <- paste(getwd(), dir, name, sep = "/")
 
                 for (sub_dir in sub_dirs) {
-                    dir.create(paste0(dir, "/.stain", sub_dir), recursive = TRUE,
-                               showWarnings = FALSE)
+                    dir.create(paste(dir, ".stain", sub_dir, sep = "/"),
+                               recursive = TRUE, showWarnings = FALSE)
                 }
 
                 dir.create(paste0(dir, "/output"), recursive = TRUE,
