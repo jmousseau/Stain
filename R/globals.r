@@ -22,7 +22,13 @@ find_globals = function(source_files, object_files = c()) {
         load(object_file, envir = e)
     }
 
-    globals <- codetools::findGlobals(e$main)
+    globals <- list()
+
+    tryCatch({
+        globals <- codetools::findGlobals(e$main)
+    }, error = function(e) {
+        return(globals)
+    })
 
     # Filter known `findGlobals` errors
     known_errors <- c("{", "}", "::")
