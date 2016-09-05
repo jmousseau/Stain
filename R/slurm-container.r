@@ -7,7 +7,10 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
     public = list(
         dir = NULL,
         globals = list(),
-        initialize = function(dir = ".") {
+        settings = NULL,
+        initialize = function(dir = ".", settings = SlurmSettings$new()) {
+            self$settings <- settings
+
             sub_dirs <- c("data", "sources", "objects")
             stain_dir <- paste0(dir, ".stain")
 
@@ -28,6 +31,8 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
                 dir.create(paste0(dir, "/output"), recursive = TRUE,
                             showWarnings = FALSE)
             }
+
+            script <- SlurmBashScript$new(container$dir, self$settings)
         },
         add_object = function(name, value) {
             if (length(value) > 1) {
