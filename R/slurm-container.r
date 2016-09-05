@@ -19,7 +19,7 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
 
             is_stain <- Reduce("&", sub_dirs %in% sapply(list.dirs(stain_dir), basename))
             if (is_stain) {
-                private$load_globals()
+                private$update_globals()
             } else {
                 name <- paste0("job_", private$rand_alphanumeric())
                 dir <- paste(getwd(), dir, name, sep = "/")
@@ -49,6 +49,8 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
             } else {
                 stop("Object must have an non NA value.")
             }
+
+            private$update_globals()
         },
         remove_objects = function(names) {
             private$remove_files(paste0(names, ".RData"), "objects")
@@ -84,6 +86,8 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
             for (file in files) {
                 file.copy(file, dir, recursive = TRUE)
             }
+
+            private$update_globals()
         },
         remove_files = function(files, stain_sub_dir) {
             for (file in files) {
@@ -94,6 +98,8 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
                 file <- paste(self$dir, ".stain", stain_sub_dir, file, sep = "/")
                 file.remove(file)
             }
+
+            private$update_globals()
         },
         clean_object_files = function() {
             object_files <- list.files(paste0(self$dir, ".stain/objects"), full.names = TRUE)
@@ -102,7 +108,7 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
                 file.remove(object_file)
             }
         },
-        load_globals = function() {
+        update_globals = function() {
             source_files <- list.files(paste0(self$dir, ".stain/sources"), full.names = TRUE)
             object_files <- list.files(paste0(self$dir, ".stain/objects"), full.names = TRUE)
 
