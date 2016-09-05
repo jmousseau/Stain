@@ -4,11 +4,11 @@
 #' the `sbatch` command.
 SlurmBashScript <- R6::R6Class("SlurmBashScript",
     public = list(
-        initialize = function(container, settings) {
+        initialize = function(container_dir, settings) {
             private$settings <- settings
 
-            private$cat_main_file_magic(container$dir)
-            private$write_slurm_script(container$dir)
+            private$cat_main_file_magic(container_dir)
+            private$write_slurm_script(container_dir)
         }
     ),
     private = list(
