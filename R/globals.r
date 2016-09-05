@@ -3,6 +3,8 @@
 #' This funciton sources files and loads objects into an environment
 #' and then runs \code{codetools::findGlobals} on the environment.
 #'
+#' NOTE: Globals are determined for the \code{main()} function only!
+#'
 #' @param source_files R files containing globals to exclude such as
 #' function declarations.
 #'
