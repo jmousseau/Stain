@@ -18,7 +18,9 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
             }
 
             is_stain <- Reduce("&", sub_dirs %in% sapply(list.dirs(stain_dir), basename))
-            if (!is_stain) {
+            if (is_stain) {
+                private$update_globals()
+            } else {
                 name <- paste0("job_", private$rand_alphanumeric())
                 dir <- paste(getwd(), dir, name, sep = "/")
 
@@ -92,6 +94,23 @@ SlurmContainer <- R6::R6Class("SlurmContainer",
                 file <- paste(self$dir, ".stain", stain_sub_dir, file, sep = "/")
                 file.remove(file)
             }
+        },
+        update_globals = function() {
+            source_files <- list.files(paste0(self$dir, ".stain/sources"), full.names = TRUE)
+            object_files <- list.files(paste0(self$dir, ".stain/objects"), full.names = TRUE)
+
+            globals <- find_globals(source_files)
+
+            e <- new.env()
+            for (object_file in object_files) {
+                load(object_file, envir = e)
+                name <- strsplit(basename(object_file), "[.]")[[1]][1]
+                if (name %in% names(e)) {
+                    globals[[name]] <- e[[name]]
+                }
+            }
+
+            self$globals <- globals
         },
         rand_alphanumeric = function(len = 3) {
             population <- c(rep(0:9, each = 5), LETTERS, letters)
