@@ -15,7 +15,7 @@ SlurmBashScript <- R6::R6Class("SlurmBashScript",
         settings = NA,
         cat_main_file_magic = function(dir) {
             main_file <- ".default_stain_main.R"
-            file <- paste(dir, ".stain/sources", main_file, sep = "/")
+            file <- paste0(dir, "/.stain/sources/", main_file)
             sourcing <- paste("sapply(list.files('./.stain/sources', full.names = TRUE)[!(list.files('./sources')) %in%",
                               paste0("'", main_file, "'"), "], source)")
             loading <- paste("sapply(list.files('./.stain/objects', full.names = TRUE),
