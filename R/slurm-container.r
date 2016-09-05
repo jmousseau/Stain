@@ -3,7 +3,9 @@
 #' A slurm container is simply a directory with a specific
 #' structure, particulary it has a submit.slurm script at the
 #' top level.
-SlurmContainer <- R6::R6Class("SlurmContainer",
+#'
+#' @export
+Stain <- R6::R6Class("SlurmContainer",
     public = list(
         dir = NULL,
         globals = list(),
