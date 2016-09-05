@@ -16,7 +16,9 @@ SlurmJob <- R6::R6Class("SlurmJob",
                 self$source_files <- source_files
 
                 private$base_dir <- container_location
-                private$find_globals()
+                globals <- find_globals(c(main_file, source_files))
+                self$params <- globals
+                private$globals <- globals
                 private$settings <- settings
             } else {
                 stop("A file containing a main() function must be provided.")
@@ -53,60 +55,7 @@ SlurmJob <- R6::R6Class("SlurmJob",
     private = list(
         globals = list(),
         base_dir = ".",
-        settings = NA,
-        find_globals = function() {
-            e <- new.env()
-            testthat::source_file(self$main_file, e)
-
-            for (file in self$source_files) {
-                testthat::source_file(file, e)
-            }
-
-            globals <- codetools::findGlobals(e$main)
-
-            # Filter known `findGlobals` errors
-            known_errors <- c("{", "}", "::")
-            globals <- globals[!(globals %in% known_errors)]
-
-            # Filter all functions in loaded packages
-            for (package in (.packages())) {
-                package <- paste0("package:", package)
-                exports <- names(as.list(as.environment(package)))
-                globals <- globals[!(globals %in% exports)]
-            }
-
-            # Filter functions and variables in source files
-            globals <- globals[!(globals %in% names(as.list(e)))]
-
-            nglobals <- length(globals)
-
-            if (nglobals > 0) {
-                if (nglobals == 1) {
-                    vars <- "var"
-                    t_vars <- "this var"
-                } else {
-                    vars <- "vars"
-                    t_vars <- "these vars"
-                }
-
-                cat(paste("Found", nglobals, vars, "to specify:"))
-                for (global in globals) {
-                    cat(paste("\n    -", global))
-                }
-
-                cat(paste("\n\nSet", t_vars, "in the `params` property of your `SlurmJob` instance."))
-            }
-
-            # Set the values of all gobals to NA
-            global_list <- list()
-
-            for (global in globals) {
-                global_list[[global]] <- NA
-            }
-
-            private$globals = global_list
-            self$params = global_list
-        }
+        settings = NA
     )
 )
 
