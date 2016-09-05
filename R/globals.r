@@ -27,6 +27,7 @@ find_globals = function(source_files, object_files = c()) {
     tryCatch({
         globals <- codetools::findGlobals(e$main)
     }, error = function(e) {
+        warning("No main() function was found. Globals cannot be set until a main function is found.")
         return(globals)
     })
 
