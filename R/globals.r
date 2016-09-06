@@ -61,7 +61,7 @@ find_globals = function(source_files, object_files = c()) {
             cat(paste("\n    -", global))
         }
 
-        cat(paste("\n\nSet", t_vars, "in the `params` property of your `SlurmJob` instance."))
+        cat(paste("\n\nSet", t_vars, "in the `globals` property of your `Stain` instance."))
     }
 
     # Set the values of all gobals to NA
