@@ -13,7 +13,7 @@ submit_jobs <- function(jobs) {
     for (dir in jobs) {
         tryCatch({
             setwd(dir)
-            system("sh submit.sh")
+            system("sbatch submit.slurm")
         }, error = function(e) {
             setwd(wd)
             stop(e)
