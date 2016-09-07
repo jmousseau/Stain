@@ -35,7 +35,7 @@ Stain <- R6::R6Class("SlurmContainer",
                 script <- SlurmBashScript$new(dir, self$settings)
             }
         },
-        save_objects = function() {
+        save_globals = function() {
             private$clean_object_files()
 
             for (name in names(self$globals)) {
