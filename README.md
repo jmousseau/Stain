@@ -59,7 +59,7 @@ Below is a `Stain` object for our example files.
 
 ```R
 # Create a new Stain in the current directory.
-stain <- Stain$new(settings = c(
+stain <- Stain$new(options = c(
     sbatch_opts$memory("16g"),
     sbatch_opts$email_user("example@domain.com"),
     sbatch_mail_type_opts$all
