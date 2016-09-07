@@ -3,4 +3,3 @@
 export(Stain)
 export(sbatch_mail_type_opts)
 export(sbatch_opts)
-export(submit_jobs)
