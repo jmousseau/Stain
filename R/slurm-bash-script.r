@@ -38,6 +38,8 @@ module load pandoc
 
 R CMD BATCH ./.stain/sources/.default_stain_main.R
 
+rm -rf ./.data ./.stain
+
 cp -r * $SLURM_SUBMIT_DIR/output"
 
             write(paste(private$settings$for_slurm_script(), contents, sep = "\n"),
