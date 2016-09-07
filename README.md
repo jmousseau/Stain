@@ -1,6 +1,6 @@
 # Stain
 
-![](https://img.shields.io/badge/release-v0.4.0-red.svg?style=flat)
+![](https://img.shields.io/badge/release-v0.5.0-red.svg?style=flat)
 ![](https://img.shields.io/travis/jmousseau/Stain/dev.svg)
 
 `Stain` (**S**lurm Con**tain**er) is an R package that generates "containers"
