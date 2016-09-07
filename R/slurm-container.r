@@ -10,8 +10,8 @@ Stain <- R6::R6Class("SlurmContainer",
         dir = NULL,
         globals = list(),
         settings = NULL,
-        initialize = function(dir = ".", settings = SlurmSettings$new()) {
-            self$settings <- settings
+        initialize = function(dir = ".", settings = c()) {
+            self$settings <- SlurmSettings$new(settings)
 
             sub_dirs <- c("data", "sources", "objects")
             stain_dir <- paste0(dir, ".stain")
