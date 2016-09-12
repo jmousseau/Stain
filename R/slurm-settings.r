@@ -4,8 +4,8 @@
 SlurmSettings <- R6::R6Class("SlurmSettings",
     public = list(
         options = c(sbatch_opts$nodes(1),
-                    sbatch_opts$memory("16g"),
-                    sbatch_opts$cpus_per_task(12),
+                    sbatch_opts$memory("8g"),
+                    sbatch_opts$cpus_per_task(1),
                     sbatch_opts$time("00:30:00")),
         initialize = function(options = c()) {
             for (opt in options) {
