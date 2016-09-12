@@ -24,9 +24,9 @@ in our slurm job:
 # main.R
 
 main <- function() {
-    # The reason why the "./.data" directory was used will be clear
+    # The reason why the "./data" directory was used will be clear
     # later on.
-    input_file <- paste("./.data", input_file_name, sep = "/")
+    input_file <- paste("./data", input_file_name, sep = "/")
     data <- data.table::fread(input_file)
     default_write(data, output_file_name)
 }
@@ -72,7 +72,7 @@ stain$add_sources(c("main.R", "default_write.R"))
 stain$add_data("data.txt")
 ```
 
-The `add_data` function will place all data files in a `./.data` directory which
+The `add_data` function will place all data files in a `./data` directory which
 only exists when your slurm job is running. **NOTE: Files added will not retain
 their parent directory structure.**
 

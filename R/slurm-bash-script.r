@@ -30,15 +30,15 @@ SlurmBashScript <- R6::R6Class("SlurmBashScript",
 cp -r ./.stain $PFSDIR
 cd $PFSDIR
 
-mkdir .data
-mv ./.stain/data/* ./.data
+mkdir ./data
+mv ./.stain/data/* ./data
 
 module load hpc-ods
 module load pandoc
 
 R CMD BATCH ./.stain/sources/.default_stain_main.R
 
-rm -rf ./.data ./.stain
+rm -rf ./data ./.stain
 
 cp -r * $SLURM_SUBMIT_DIR/output"
 
