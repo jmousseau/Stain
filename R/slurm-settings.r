@@ -1,7 +1,7 @@
-#' SlurmSettings R6 object.
+#' SlurmOptions R6 object.
 #'
 #' An interface to SBATCH settings.
-SlurmSettings <- R6::R6Class("SlurmSettings",
+SlurmOptions <- R6::R6Class("SlurmOptions",
     public = list(
         options = c(sbatch_opts$nodes(1),
                     sbatch_opts$memory("8g"),

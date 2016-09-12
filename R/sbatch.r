@@ -102,3 +102,4 @@ sbatch_mail_type_opts <- list(
     time_limit_80 = sbatch_opt("mail-type")("TIME_LIMIT_80"),
     time_limit_50 = sbatch_opt("mail-type")("TIME_LIMIT_50")
 )
+

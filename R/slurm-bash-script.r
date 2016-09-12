@@ -4,15 +4,15 @@
 #' the `sbatch` command.
 SlurmBashScript <- R6::R6Class("SlurmBashScript",
     public = list(
-        initialize = function(container_dir, settings) {
-            private$settings <- settings
+        initialize = function(container_dir, options) {
+            private$options <- options
 
             private$cat_main_file_magic(container_dir)
             private$write_slurm_script(container_dir)
         }
     ),
     private = list(
-        settings = NA,
+        options = NA,
         cat_main_file_magic = function(dir) {
             main_file <- ".default_stain_main.R"
             file <- paste0(dir, "/.stain/sources/", main_file)
@@ -42,7 +42,7 @@ rm -rf ./.data ./.stain
 
 cp -r * $SLURM_SUBMIT_DIR/output"
 
-            write(paste(private$settings$for_slurm_script(), contents, sep = "\n"),
+            write(paste(private$options$for_slurm_script(), contents, sep = "\n"),
                   file = paste(dir, "submit.slurm", sep = "/"))
         }
     )
