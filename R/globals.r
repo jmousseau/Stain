@@ -45,25 +45,6 @@ find_globals = function(source_files, object_files = c()) {
     # Filter functions and variables in source files
     globals <- globals[!(globals %in% names(as.list(e)))]
 
-    nglobals <- length(globals)
-
-    if (nglobals > 0) {
-        if (nglobals == 1) {
-            vars <- "var"
-            t_vars <- "this var"
-        } else {
-            vars <- "vars"
-            t_vars <- "these vars"
-        }
-
-        cat(paste("Found", nglobals, vars, "to specify:"))
-        for (global in globals) {
-            cat(paste("\n    -", global))
-        }
-
-        cat(paste("\n\nSet", t_vars, "in the `globals` property of your `Stain` instance."))
-    }
-
     # Set the values of all gobals to NA
     global_list <- list()
 

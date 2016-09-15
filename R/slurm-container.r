@@ -147,6 +147,9 @@ Stain <- R6::R6Class("SlurmContainer",
                 }
             }
 
+            # Display helpful message to the user
+            stain_message_globals(globals)
+
             self$globals <- globals
         },
         rand_alphanumeric = function(len = 3) {
