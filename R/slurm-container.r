@@ -63,11 +63,14 @@ Stain <- R6::R6Class("SlurmContainer",
                 warning("Container not deleted becaue TRUE must be passed to `delete`.")
             }
         },
-        get_files = function() {
+        get_files = function(full.names = FALSE) {
             return(list(
-                data = list.files(paste(self$dir, ".stain", "data", sep = "/")),
-                objects = list.files(paste(self$dir, ".stain", "objects", sep = "/")),
-                sources = list.files(paste(self$dir, ".stain", "sources", sep = "/"))
+                data = list.files(paste(self$dir, ".stain", "data", sep = "/"),
+                                  full.names = full.names),
+                objects = list.files(paste(self$dir, ".stain", "objects", sep = "/"),
+                                     full.names = full.names),
+                sources = list.files(paste(self$dir, ".stain", "sources", sep = "/"),
+                                     full.names = full.names)
             ))
         }
     ),
