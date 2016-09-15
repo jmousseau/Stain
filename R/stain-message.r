@@ -28,3 +28,35 @@ stain_message_globals <- function(globals) {
         cat(paste("\n\nSet", demonstrative, "in the `globals` property of your `Stain` instance."))
     }
 }
+
+
+#' Message for source files.
+#'
+#' One of the source files must contain a \code{main} function and this
+#' message will notify the user if none of his or her source files
+#' contain a \code{main} function.
+#'
+#' @param source_files The list of R source files.
+stain_message_source_files <- function(source_files) {
+    file_count <- length(source_files)
+
+    if (file_count > 0) {
+        e <- new.env()
+
+        for (file in source_files) {
+            testthat::source_file(file, e)
+        }
+
+        if (is.null(e$main)) {
+            if (file_count == 1) {
+                plurality = paste("Your R source file doesn't")
+            } else {
+                plurality = paste("None of your", file_count, "R source files")
+            }
+
+            cat(paste(plurality, "contain a `main()` function."))
+        }
+    } else {
+        cat("A `Stain` object must contain at least one source file.")
+    }
+}

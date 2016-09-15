@@ -46,9 +46,11 @@ Stain <- R6::R6Class("SlurmContainer",
         },
         add_sources = function(files) {
             private$add_files(files, "sources")
+            stain_message_source_files(self$get_files(TRUE)$sources)
         },
         remove_sources = function(basenames) {
             private$remove_files(basenames, "sources")
+            stain_message_source_files(self$get_files(TRUE)$sources)
         },
         add_data = function(files) {
             private$add_files(files, "data")
