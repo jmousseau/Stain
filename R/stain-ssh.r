@@ -1,3 +1,22 @@
+#' ssh with the Stain RSA key.
+#'
+#' The stain-specific key must be used to ensure remote login.
+#'
+#' @param user The user on your remote host.
+#'
+#' @param host The static ip address or url for the remote host.
+#'
+#' @param cmds A sting of one or more commands to run on the remote host.
+stain_ssh <- function(user, host, cmds = "") {
+    if (!stain_ssh_key_exists()) {
+        invisible(stain_ssh_key_gen())
+    }
+
+    remote_host <- paste(user, host, sep = "@")
+    system(paste("ssh -i ~/.ssh/stain_rsa", cmds))
+}
+
+
 #' Check for a Stain ssh key.
 #'
 #' @return If a public/private key pair exists in \code{~/.ssh/} with the name
