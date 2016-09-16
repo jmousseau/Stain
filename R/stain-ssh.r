@@ -19,3 +19,35 @@ stain_ssh_key_gen <- function(overwrite = FALSE) {
         system("ssh-keygen -b 4096 -f ~/.ssh/stain_rsa")
     }
 }
+
+
+#' Create bash code for ssh setup.
+#'
+#' In order for a remote submission to work, an ssh public key for Stain must
+#' be present in the remote host's \code{~/.ssh/authorized_keys} list. This
+#' process requires two steps. 1) To \code{scp} the public key and 2) to add
+#' the key to \code{~/.ssh/authorized_keys}. This function will autogenerate
+#' the necessary bash code to complete these steps.
+#'
+#' @param user The user on your remote host.
+#'
+#' @param host The static ip address or url for the remote host.
+#'
+#' @return A single bash command to run.
+#'
+#' @export
+stain_ssh_setup <- function(user, host) {
+    remote_host <- paste(user, host, sep = "@")
+    scp <- paste0("scp ~/.ssh/stain_rsa.pub", remote_host, ":~/.ssh/stain_rsa.pub")
+    ssh <- paste0("ssh ", scp, " 'echo `cat ~/.ssh/stain_rsa.pub` >> ~/.ssh/authorized_keys'")
+    cmd <- paste0(scp, " && ", ssh)
+
+    if (Sys.info()["sysname"] == "Darwin") {
+        cat("The bash command to setup remote submission has been copied to your clipboard. Run it in your terminal.")
+        write.table(cmd, file = pipe("pbcopy"), sep = "\t",
+                    col.names = F, row.names = F , quote = F)
+    } else {
+        cat("Run the following bash command in your terminal to setup remote submission:")
+        cat(cmd)
+    }
+}
