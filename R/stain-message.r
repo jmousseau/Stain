@@ -60,3 +60,12 @@ stain_message_source_files <- function(source_files) {
         cat("A `Stain` object must contain at least one source file.")
     }
 }
+
+
+#' Message for ssh.
+#'
+#' Notify the user about remote host ssh requirements.
+stain_message_ssh <- function() {
+    cat("If your cluster is remote, add the .ssh/stain_rsa.pub key to your remote host. ")
+    cat("To autogenerate the bash code, see ?stain_ssh_setup.")
+}
