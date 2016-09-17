@@ -13,7 +13,8 @@ stain_ssh <- function(user, host, cmds = "") {
     }
 
     remote_host <- paste(user, host, sep = "@")
-    system(paste("ssh -i ~/.ssh/stain_rsa", cmds))
+    system(paste("ssh", remote_host, "-t -t -i ~/.ssh/stain_rsa",
+                 paste0("\"", cmds, "\"")))
 }
 
 
