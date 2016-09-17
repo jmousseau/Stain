@@ -58,7 +58,7 @@ stain_ssh_key_exists <- function() {
 #' value is FALSE.
 stain_ssh_key_gen <- function(overwrite = FALSE) {
     if (overwrite | !(overwrite | stain_ssh_key_exists())) {
-        system("ssh-keygen -b 4096 -f ~/.ssh/stain_rsa")
+        system("ssh-keygen -b 4096 -f ~/.ssh/stain_rsa -N ''")
     }
 }
 
