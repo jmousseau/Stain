@@ -74,6 +74,13 @@ Stain <- R6::R6Class("SlurmContainer",
                 sources = list.files(paste(self$dir, ".stain", "sources", sep = "/"),
                                      full.names = full.names)
             ))
+        },
+        submit = function(user, host, submit_dir) {
+            stain_scp(user, host, self$dir, submit_dir)
+
+            job_dir <- paste(submit_dir, self$dir, sep = "/")
+            submit_cmd <- paste("cd", job_dir, "&& sbatch submit.slurm")
+            stain_ssh(user, host, submit_cmd)
         }
     ),
     private = list(
