@@ -62,17 +62,21 @@ stain_message_source_files <- function(source_files, is_submitting = FALSE) {
                 plurality = paste("None of your", file_count, "R source files")
             }
 
-            message(paste(plurality, "contain a `main()` function."))
+            m <- paste(plurality, "contain a `main()` function.")
 
             if (is_submitting) {
-                stop("Aborting submission.")
+                stop(paste(m, "Aborting submission."), call. = FALSE)
+            } else {
+                message(m)
             }
         }
     } else {
         message("A `Stain` object must contain at least one source file.")
 
         if (is_submitting) {
-            stop("Aborting submission.")
+            stop(paste(m, "Aborting submission."), call. = FALSE)
+        } else {
+            message(m)
         }
     }
 }

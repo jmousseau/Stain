@@ -78,20 +78,20 @@ Stain <- R6::R6Class("SlurmContainer",
                                            private$is_submitting)
             }, error = function(e) {
                 private$is_submitting = FALSE
-                stop("Aborting submission.", call. = FALSE)
+                stop(e)
             })
 
             tryCatch({
                 private$save_globals()
             }, error = function(e) {
                 private$is_submitting = FALSE
-                stop("A global may not have an NA value. Aborting submission", call. = FALSE)
+                stop("A global may not have an NA value. Aborting submission.", call. = FALSE)
             })
 
             tryCatch({
                 stain_scp(user, host, self$dir, submit_dir)
 
-                job_dir <- paste(submit_dir, self$dir, sep = "/")
+                job_dir <- paste(submit_dir, basename(self$dir), sep = "/")
                 submit_cmd <- paste("cd", job_dir, "&& sbatch submit.slurm")
                 stain_ssh(user, host, submit_cmd)
             }, error = function(e) {
