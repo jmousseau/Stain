@@ -20,13 +20,13 @@ stain_message_globals <- function(globals, is_submitting = FALSE) {
             demonstrative <- paste("these", plurality)
         }
 
-        cat(paste(length(na_globals), plurality, "to specify:"))
+        message(paste(length(na_globals), plurality, "to specify:"))
 
         for (global in names(na_globals)) {
-            cat(paste("\n    -", global))
+            message(paste("\n    -", global))
         }
 
-        cat(paste("\n\nSet", demonstrative, "in the `globals` property of your `Stain` instance.\n"))
+        message(paste("\nSet", demonstrative, "in the `globals` property of your `Stain` instance.\n"))
 
         if (is_submitting) {
             stop("Aborting submission.")
@@ -62,14 +62,14 @@ stain_message_source_files <- function(source_files, is_submitting = FALSE) {
                 plurality = paste("None of your", file_count, "R source files")
             }
 
-            cat(paste(plurality, "contain a `main()` function."))
+            message(paste(plurality, "contain a `main()` function."))
 
             if (is_submitting) {
                 stop("Aborting submission.")
             }
         }
     } else {
-        cat("A `Stain` object must contain at least one source file.")
+        message("A `Stain` object must contain at least one source file.")
 
         if (is_submitting) {
             stop("Aborting submission.")
