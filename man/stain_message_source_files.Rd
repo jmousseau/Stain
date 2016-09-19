@@ -4,10 +4,13 @@
 \alias{stain_message_source_files}
 \title{Message for source files.}
 \usage{
-stain_message_source_files(source_files)
+stain_message_source_files(source_files, is_submitting = FALSE)
 }
 \arguments{
 \item{source_files}{The list of R source files.}
+
+\item{is_submitting}{Is a slurm job being submitted? Default
+value is FALSE to avoid any fatal errors.}
 }
 \description{
 One of the source files must contain a \code{main} function and this

@@ -4,10 +4,13 @@
 \alias{stain_message_globals}
 \title{Message for globals.}
 \usage{
-stain_message_globals(globals)
+stain_message_globals(globals, is_submitting = FALSE)
 }
 \arguments{
 \item{globals}{The list of globals for a stain.}
+
+\item{is_submitting}{Is a slurm job being submitted? Default
+value is FALSE to avoid any fatal errors.}
 }
 \description{
 Prompt the user to set globals if they have not already been

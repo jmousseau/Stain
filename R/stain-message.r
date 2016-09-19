@@ -4,7 +4,10 @@
 #' specified.
 #'
 #' @param globals The list of globals for a stain.
-stain_message_globals <- function(globals) {
+#'
+#' @param is_submitting Is a slurm job being submitted? Default
+#' value is FALSE to avoid any fatal errors.
+stain_message_globals <- function(globals, is_submitting = FALSE) {
     na_globals <- globals[sapply(globals, is.na)]
     n_globals <- length(na_globals)
 
@@ -23,7 +26,11 @@ stain_message_globals <- function(globals) {
             cat(paste("\n    -", global))
         }
 
-        cat(paste("\n\nSet", demonstrative, "in the `globals` property of your `Stain` instance."))
+        cat(paste("\n\nSet", demonstrative, "in the `globals` property of your `Stain` instance.\n"))
+
+        if (is_submitting) {
+            stop("Aborting submission.")
+        }
     }
 }
 
@@ -35,7 +42,10 @@ stain_message_globals <- function(globals) {
 #' contain a \code{main} function.
 #'
 #' @param source_files The list of R source files.
-stain_message_source_files <- function(source_files) {
+#'
+#' @param is_submitting Is a slurm job being submitted? Default
+#' value is FALSE to avoid any fatal errors.
+stain_message_source_files <- function(source_files, is_submitting = FALSE) {
     file_count <- length(source_files)
 
     if (file_count > 0) {
@@ -53,9 +63,17 @@ stain_message_source_files <- function(source_files) {
             }
 
             cat(paste(plurality, "contain a `main()` function."))
+
+            if (is_submitting) {
+                stop("Aborting submission.")
+            }
         }
     } else {
         cat("A `Stain` object must contain at least one source file.")
+
+        if (is_submitting) {
+            stop("Aborting submission.")
+        }
     }
 }
 
