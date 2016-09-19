@@ -5,12 +5,10 @@
 #'
 #' @param globals The list of globals for a stain.
 stain_message_globals <- function(globals) {
-    na_globals <- sapply(globals, is.na)
+    na_globals <- globals[sapply(globals, is.na)]
     n_globals <- length(na_globals)
 
-    if (n_globals != 0) {
-        na <- globals[na_globals]
-
+    if (n_globals > 0) {
         if (n_globals == 1) {
             plurality <- "global"
             demonstrative <- paste("this", plurality)
