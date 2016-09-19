@@ -23,10 +23,10 @@ stain_message_globals <- function(globals, is_submitting = FALSE) {
         message(paste(length(na_globals), plurality, "to specify:"))
 
         for (global in names(na_globals)) {
-            message(paste("\n    -", global))
+            message(paste("\n    -", global), appendLF = FALSE)
         }
 
-        message(paste("\nSet", demonstrative, "in the `globals` property of your `Stain` instance.\n"))
+        message(paste("\n\nSet", demonstrative, "in the `globals` property of your `Stain` instance.\n"))
 
         if (is_submitting) {
             stop("Aborting submission.")
