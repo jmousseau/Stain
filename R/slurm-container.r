@@ -62,7 +62,7 @@ Stain <- R6::R6Class("SlurmContainer",
             if (confirmation) {
                 system(paste("rm -rf", self$dir))
             } else {
-                warning("Container not deleted becaue TRUE must be passed to `delete`.")
+                warning("Container not deleted because TRUE must be passed to `delete`.")
             }
         },
         get_files = function(full.names = FALSE) {
