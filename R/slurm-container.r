@@ -34,23 +34,18 @@ Stain <- R6::R6Class("SlurmContainer",
                 script <- SlurmBashScript$new(dir, private$options)
             }
         },
-        save_globals = function() {
-            private$clean_object_files()
-
-            for (name in names(self$globals)) {
-                private$add_object(name, self$globals[[name]])
-            }
-        },
         remove_objects = function(names) {
             private$remove_files(paste0(names, ".RData"), "objects")
         },
         add_sources = function(files) {
             private$add_files(files, "sources")
-            stain_message_source_files(self$get_files(TRUE)$sources)
+            stain_message_source_files(self$get_files(TRUE)$sources,
+                                       private$is_submitting)
         },
         remove_sources = function(basenames) {
             private$remove_files(basenames, "sources")
-            stain_message_source_files(self$get_files(TRUE)$sources)
+            stain_message_source_files(self$get_files(TRUE)$sources,
+                                       private$is_submitting)
         },
         add_data = function(files) {
             private$add_files(files, "data")
@@ -76,15 +71,40 @@ Stain <- R6::R6Class("SlurmContainer",
             ))
         },
         submit = function(user, host, submit_dir) {
-            stain_scp(user, host, self$dir, submit_dir)
+            private$is_submitting = TRUE
 
-            job_dir <- paste(submit_dir, self$dir, sep = "/")
-            submit_cmd <- paste("cd", job_dir, "&& sbatch submit.slurm")
-            stain_ssh(user, host, submit_cmd)
+            tryCatch({
+                stain_message_source_files(self$get_files(TRUE)$sources,
+                                           private$is_submitting)
+            }, error = function(e) {
+                private$is_submitting = FALSE
+                stop("Aborting submission.", call. = FALSE)
+            })
+
+            tryCatch({
+                private$save_globals()
+            }, error = function(e) {
+                private$is_submitting = FALSE
+                stop("A global may not have an NA value. Aborting submission", call. = FALSE)
+            })
+
+            tryCatch({
+                stain_scp(user, host, self$dir, submit_dir)
+
+                job_dir <- paste(submit_dir, self$dir, sep = "/")
+                submit_cmd <- paste("cd", job_dir, "&& sbatch submit.slurm")
+                stain_ssh(user, host, submit_cmd)
+            }, error = function(e) {
+                private$is_submitting = FALSE
+                stop(e)
+            })
+
+            private$is_submitting = FALSE
         }
     ),
     private = list(
         options = NULL,
+        is_submitting = FALSE,
         add_files = function(files, stain_sub_dir) {
             dir <- paste(self$dir, ".stain", stain_sub_dir, sep = "/")
 
@@ -160,9 +180,18 @@ Stain <- R6::R6Class("SlurmContainer",
             }
 
             # Display helpful message to the user
-            stain_message_globals(globals)
+            if (length(globals) > 0) {
+                stain_message_globals(globals, private$is_submitting)
+            }
 
             self$globals <- globals
+        },
+        save_globals = function() {
+            private$clean_object_files()
+
+            for (name in names(self$globals)) {
+                private$add_object(name, self$globals[[name]])
+            }
         },
         rand_alphanumeric = function(len = 3) {
             population <- c(rep(0:9, each = 5), LETTERS, letters)
