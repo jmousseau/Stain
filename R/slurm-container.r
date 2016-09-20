@@ -59,8 +59,6 @@ Stain <- R6::R6Class("SlurmContainer",
             return(list(
                 data = list.files(paste(self$dir, ".stain", "data", sep = "/"),
                                   full.names = full.names),
-                objects = list.files(paste(self$dir, ".stain", "objects", sep = "/"),
-                                     full.names = full.names),
                 sources = list.files(paste(self$dir, ".stain", "sources", sep = "/"),
                                      full.names = full.names)
             ))
