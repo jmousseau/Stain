@@ -106,10 +106,16 @@ stain$globals$input_file_name <- "data.txt"
 stain$globals$output_file_name <- "converted_data.csv"
 ```
 
-To submit the slurm job, navigate to the slurm container and run:
+Submitting the slurm job is as easy as:
 ```R
 # Submit to <user>@<host>:<submit directory>
 stain$submit("<user>", "<host>", "<submit directory>")
+```
+
+When your slurm job has finished, the output files may be fetched with:
+```R
+# Submit to <user>@<host>:<submit directory>
+stain$fetch_output("<user>", "<host>", "<submit directory>")
 ```
 
 
@@ -119,8 +125,9 @@ accessible by our slurm container? The code below will configure the container
 for a new input file.
 
 ```R
-# "job_abc/" would be the directory of your previously existing slurm container
-stain <- Stain$new("job_abc/")
+# "job_<alphanumeric>/" would be the directory of a previously existing slurm
+# container
+stain <- Stain$new("job_<alphanumeric>/")
 
 # Add the new data file
 stain$add_data("data_2.txt")
@@ -131,6 +138,10 @@ stain$globals$output_file_name <- "converted_data_2.csv"
 
 stain$submit("<user>", "<host>", "<submit directory>")
 ```
+
+In most cases submitting all variants of a job then copying back all the output
+is the most logical because the `fetch_output` will always copy all the output
+even if some of the files have already been copied.
 
 ---
 
