@@ -34,12 +34,12 @@ Stain <- R6::R6Class("SlurmContainer",
         },
         add_sources = function(files) {
             private$add_files(files, "sources")
-            stain_message_source_files(self$get_files(TRUE)$sources,
+            stain_message_source_files(self$list_files(TRUE)$sources,
                                        private$is_submitting)
         },
         remove_sources = function(basenames) {
             private$remove_files(basenames, "sources")
-            stain_message_source_files(self$get_files(TRUE)$sources,
+            stain_message_source_files(self$list_files(TRUE)$sources,
                                        private$is_submitting)
         },
         add_data = function(files) {
@@ -55,7 +55,7 @@ Stain <- R6::R6Class("SlurmContainer",
                 warning("Container not deleted because TRUE must be passed to `delete`.")
             }
         },
-        get_files = function(full.names = FALSE) {
+        list_files = function(full.names = FALSE) {
             return(list(
                 data = list.files(paste(self$dir, ".stain", "data", sep = "/"),
                                   full.names = full.names),
@@ -67,7 +67,7 @@ Stain <- R6::R6Class("SlurmContainer",
             private$is_submitting = TRUE
 
             tryCatch({
-                stain_message_source_files(self$get_files(TRUE)$sources,
+                stain_message_source_files(self$list_files(TRUE)$sources,
                                            private$is_submitting)
             }, error = function(e) {
                 private$is_submitting = FALSE

@@ -163,6 +163,9 @@ be loaded prior to executing any R code.
 here. One of the source files must contain a `main()` function. Also contains
 `.default_stain_main.R` which contains code to run your R code.
 
+The files in `sources/` and `data/` may be listed using the `list_files()`
+Stain method.
+
 Another core component of a slurm container is the `submit.slurm` bash script
 which is configured for your options and executes your R code and exists at the
 top level of a slurm container.
