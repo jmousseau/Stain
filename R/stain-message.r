@@ -86,6 +86,6 @@ stain_message_source_files <- function(source_files, is_submitting = FALSE) {
 #'
 #' Notify the user about remote host ssh requirements.
 stain_message_ssh <- function() {
-    cat("If your cluster is remote, add the .ssh/stain_rsa.pub key to your remote host. ")
-    cat("To autogenerate the bash code, see ?stain_ssh_setup.")
+    packageStartupMessage("If your cluster is remote, add the .ssh/stain_rsa.pub key to your remote host. ")
+    packageStartupMessage("To autogenerate the bash code, see ?stain_ssh_setup.")
 }
