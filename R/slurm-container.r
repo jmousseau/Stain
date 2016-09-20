@@ -29,8 +29,6 @@ Stain <- R6::R6Class("SlurmContainer",
                                recursive = TRUE, showWarnings = FALSE)
                 }
 
-                dir.create(paste0(dir, "/output"), recursive = TRUE,
-                            showWarnings = FALSE)
                 script <- SlurmBashScript$new(dir, private$options)
             }
         },

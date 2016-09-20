@@ -28,6 +28,7 @@ SlurmBashScript <- R6::R6Class("SlurmBashScript",
             contents <- "
 # copy necessary files over
 cp -r ./.stain $PFSDIR
+mkdir ./output
 cd $PFSDIR
 
 mkdir ./data
