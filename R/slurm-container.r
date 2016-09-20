@@ -32,9 +32,6 @@ Stain <- R6::R6Class("SlurmContainer",
                 script <- SlurmBashScript$new(dir, private$options)
             }
         },
-        remove_objects = function(names) {
-            private$remove_files(paste0(names, ".RData"), "objects")
-        },
         add_sources = function(files) {
             private$add_files(files, "sources")
             stain_message_source_files(self$get_files(TRUE)$sources,
