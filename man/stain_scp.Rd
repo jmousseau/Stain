@@ -4,16 +4,12 @@
 \alias{stain_scp}
 \title{scp with the Stain RSA key.}
 \usage{
-stain_scp(user, host, from, to)
+stain_scp(from, to)
 }
 \arguments{
-\item{user}{The user on your remote host.}
+\item{from}{The directory or file to copy.}
 
-\item{host}{The static ip address or url for the remote host.}
-
-\item{from}{The local files or directory to copy from.}
-
-\item{to}{The directory in \code{<user>@<host>} to copy into.}
+\item{to}{The destination.}
 }
 \description{
 The stain-specific key must be used to ensure remote login.

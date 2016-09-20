@@ -89,7 +89,8 @@ Stain <- R6::R6Class("SlurmContainer",
             })
 
             tryCatch({
-                stain_scp(user, host, self$dir, submit_dir)
+                remote_host <- paste0(user, "@", host, ":", submit_dir)
+                stain_scp(from = self$dir, to = remote_host)
 
                 job_dir <- paste(submit_dir, basename(self$dir), sep = "/")
                 submit_cmd <- paste("cd", job_dir, "&& sbatch submit.slurm")

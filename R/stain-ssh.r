@@ -22,22 +22,11 @@ stain_ssh <- function(user, host, cmds = "") {
 #'
 #' The stain-specific key must be used to ensure remote login.
 #'
-#' @param user The user on your remote host.
+#' @param from The directory or file to copy.
 #'
-#' @param host The static ip address or url for the remote host.
-#'
-#' @param from The local files or directory to copy from.
-#'
-#' @param to The directory in \code{<user>@<host>} to copy into.
-stain_scp <- function(user, host, from, to) {
-    if (!dir.exists(from) & !file.exists(from)) {
-        stop(paste(from, "is an invalid path."))
-    }
-
-    recursive <- ifelse(dir.exists(from), "-r", "")
-    to <- paste0(user, "@", host, ":", to)
-
-    system(paste("scp -i ~/.ssh/stain_rsa", recursive, normalizePath(from), to))
+#' @param to The destination.
+stain_scp <- function(from, to) {
+    system(paste("scp -i ~/.ssh/stain_rsa -r", from, to))
 }
 
 
