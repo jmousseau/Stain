@@ -7,14 +7,15 @@
 #' @param host The static ip address or url for the remote host.
 #'
 #' @param cmds A sting of one or more commands to run on the remote host.
-stain_ssh <- function(user, host, cmds = "") {
+stain_ssh <- function(user, host, cmds = "", intern = FALSE) {
     if (!stain_ssh_key_exists()) {
         invisible(stain_ssh_key_gen())
     }
 
     remote_host <- paste(user, host, sep = "@")
     system(paste("ssh", remote_host, "-t -t -i ~/.ssh/stain_rsa",
-                 paste0("\"", cmds, "\"")))
+                 paste0("\"", cmds, "\"")),
+           intern = intern)
 }
 
 

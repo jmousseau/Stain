@@ -86,6 +86,7 @@ Stain <- R6::R6Class("SlurmContainer",
             })
 
             tryCatch({
+                message("Saving globals...")
                 private$save_globals()
             }, error = function(e) {
                 private$is_submitting = FALSE
@@ -93,12 +94,14 @@ Stain <- R6::R6Class("SlurmContainer",
             })
 
             tryCatch({
+                message("Uploading components...")
                 remote_host <- paste0(user, "@", host, ":", submit_dir)
                 stain_scp(from = self$dir, to = remote_host)
 
+                message("Submitting job...")
                 job_dir <- paste(submit_dir, basename(self$dir), sep = "/")
                 submit_cmd <- paste("cd", job_dir, "&& sbatch submit.slurm")
-                stain_ssh(user, host, submit_cmd)
+                output <- stain_ssh(user, host, submit_cmd, intern = TRUE)
             }, error = function(e) {
                 private$is_submitting = FALSE
                 stop(e)
