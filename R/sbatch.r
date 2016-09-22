@@ -62,6 +62,16 @@ sbatch_opt_key <- function(opt) {
 }
 
 
+#' Get the value of an sbatch option.
+#'
+#' @param opt An sbatch option string.
+#'
+#' @return The \code{opt}'s value.
+sbatch_opt_value <- function(opt) {
+    return(strsplit(opt, "=")[[1]][2])
+}
+
+
 #' A list of sbatch options.
 #'
 #' The value of each item in the list is a string or a function
