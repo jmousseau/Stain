@@ -51,6 +51,17 @@ Stain <- R6::R6Class("SlurmContainer",
         delete = function(confirmation = FALSE) {
             if (confirmation) {
                 system(paste("rm -rf", self$dir))
+
+                for (obj_name in ls(envir = .GlobalEnv)) {
+                    obj <- .GlobalEnv[[obj_name]]
+
+                    if(class(obj)[1] == "SlurmContainer") {
+                        if (self$dir == obj$dir) {
+                            rm(list = obj_name, envir = .GlobalEnv)
+                        }
+                    }
+
+                }
             } else {
                 warning("Container not deleted because TRUE must be passed to `delete`.")
             }
