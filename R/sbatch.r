@@ -113,3 +113,21 @@ sbatch_mail_type_opts <- list(
     time_limit_50 = sbatch_opt("mail-type")("TIME_LIMIT_50")
 )
 
+
+#' Create single sbatch mail type key value pair.
+#'
+#' A user may specific multiple \code{sbatch_mail_type_opts},
+#' which must be combined into a single key value pair that
+#' contains the options seperated by commas.
+sbatch_mail_type_combine <- function(opts) {
+    opt_keys <- sapply(opts, sbatch_opt_key, USE.NAMES = FALSE)
+    mail_type_opts <- which(opt_keys == "--mail-type")
+
+    mail_type_opt_vals <- sapply(opts[mail_type_opts], sbatch_opt_value,
+                                 USE.NAMES = FALSE)
+    mail_type_opt_val <- paste(unique(mail_type_opt_vals), collapse = ",")
+    mail_type_opt <- sbatch_opt("mail-type")(mail_type_opt_val)
+
+    return(c(opts[-mail_type_opts], mail_type_opt))
+}
+

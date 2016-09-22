@@ -28,3 +28,22 @@ test_that("Options equality is base on option keys.", {
     expect_equal(sbatch_opts_insert(a_, c(a, b)), c(a_, b))
     expect_equal(sbatch_opts_insert(a, c(b)), c(b, a))
 })
+
+test_that("Multiple sbatch mail type options are combined while other options
+          remain the same.", {
+    # Note that the option duplication is on purpose.
+    opts <- c(
+        sbatch_mail_type_opts$begin,
+        sbatch_mail_type_opts$begin,
+        sbatch_mail_type_opts$end,
+        sbatch_mail_type_opts$fail,
+        sbatch_opts$memory("16g")
+    )
+
+    expected <- c(
+        sbatch_opts$memory("16g"),
+        sbatch_opt("mail-type")("BEGIN,END,FAIL")
+    )
+
+    expect_equal(sbatch_mail_type_combine(opts), expected)
+})

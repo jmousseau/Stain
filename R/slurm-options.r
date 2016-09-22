@@ -8,7 +8,7 @@ SlurmOptions <- R6::R6Class("SlurmOptions",
                     sbatch_opts$cpus_per_task(1),
                     sbatch_opts$time("00:30:00")),
         initialize = function(options = c()) {
-            for (opt in options) {
+            for (opt in sbatch_mail_type_combine(options)) {
                 self$options <- sbatch_opts_insert(opt, self$options)
             }
         },
