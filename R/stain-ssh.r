@@ -81,6 +81,43 @@ stain_ssh_squeue <- function(user, host, job_ids) {
 }
 
 
+#' Get sacct info on certain jobs.
+#'
+#' @param user The user on your remote host.
+#'
+#' @param host The static ip address or url for the remote host.
+#'
+#' @param job_ids A collection of job ids for which to fetch statuses.
+#'
+#' @return A data frame with columns corresponding to those produced
+#' by the \code{sacct --brief --jobs} command.
+stain_ssh_sacct <- function(user, host, job_ids) {
+    job_ids <- paste(job_ids, collapse = ",")
+    remote_host <- paste(user, host, sep = "@")
+
+    sacct_cmd <- paste("sacct --brief --jobs", job_ids)
+    output <- stain_ssh(user, host, sacct_cmd, intern = TRUE)
+    output[2] <- NA
+    output <- output[!is.na(output)]
+
+    output_table <- t(sapply(output, USE.NAMES = FALSE, function(row) {
+        tokens <- strsplit(row, " ")[[1]]
+        return(tokens[tokens != "" & tokens != "\r"])
+    }))
+
+    csv_header <- output_table[1, ]
+    csv_body <- output_table[-1, ]
+    status_table <- as.data.frame(csv_body)
+
+    if (nrow(status_table) > 0) {
+        colnames(status_table) <- csv_header
+        status_table <- status_table[seq(1, length(status_table[, 1]), by = 2), ]
+    }
+
+    return(status_table)
+}
+
+
 #' Check for a Stain ssh key.
 #'
 #' @return If a public/private key pair exists in \code{~/.ssh/} with the name
