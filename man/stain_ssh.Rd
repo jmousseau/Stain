@@ -12,6 +12,9 @@ stain_ssh(user, host, cmds = "", intern = FALSE)
 \item{host}{The static ip address or url for the remote host.}
 
 \item{cmds}{A sting of one or more commands to run on the remote host.}
+
+\item{intern}{Indicates whether to capture the output of the command
+as an R character vector.}
 }
 \description{
 The stain-specific key must be used to ensure remote login.

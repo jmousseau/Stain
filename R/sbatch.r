@@ -119,6 +119,8 @@ sbatch_mail_type_opts <- list(
 #' A user may specific multiple \code{sbatch_mail_type_opts},
 #' which must be combined into a single key value pair that
 #' contains the options seperated by commas.
+#'
+#' @param opts A list of sbatch mail type options.
 sbatch_mail_type_combine <- function(opts) {
     opt_keys <- sapply(opts, sbatch_opt_key, USE.NAMES = FALSE)
     mail_type_opts <- which(opt_keys == "--mail-type")

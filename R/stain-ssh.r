@@ -7,6 +7,10 @@
 #' @param host The static ip address or url for the remote host.
 #'
 #' @param cmds A sting of one or more commands to run on the remote host.
+#'
+#' @param intern Indicates whether to capture the output of the command
+#' as an R character vector.
+#'
 stain_ssh <- function(user, host, cmds = "", intern = FALSE) {
     if (is.null(user) | is.null(host)) {
         stop("No user or host specified.", call. = FALSE)
@@ -36,6 +40,10 @@ stain_scp <- function(from, to) {
 
 
 #' Get squeue info on certain jobs.
+#'
+#' @param user The user on your remote host.
+#'
+#' @param host The static ip address or url for the remote host.
 #'
 #' @param job_ids A collection of job ids for which to fetch statuses.
 #'

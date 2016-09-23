@@ -7,6 +7,10 @@
 stain_ssh_squeue(user, host, job_ids)
 }
 \arguments{
+\item{user}{The user on your remote host.}
+
+\item{host}{The static ip address or url for the remote host.}
+
 \item{job_ids}{A collection of job ids for which to fetch statuses.}
 }
 \value{

@@ -6,6 +6,9 @@
 \usage{
 sbatch_mail_type_combine(opts)
 }
+\arguments{
+\item{opts}{A list of sbatch mail type options.}
+}
 \description{
 A user may specific multiple \code{sbatch_mail_type_opts},
 which must be combined into a single key value pair that
