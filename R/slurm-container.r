@@ -120,6 +120,19 @@ Stain <- R6::R6Class("SlurmContainer",
             output_dir <- paste0(basename(self$dir), "/output")
             remote_output_dir <- paste0(user, "@", host, ":", submit_dir, "/", output_dir)
             stain_scp(from = remote_output_dir,  to = self$dir)
+        },
+        view_statuses = function(user, host, should_view = TRUE) {
+            job_ids <- stain_sub_history(self$dir)$job_id
+            status_table <- stain_ssh_squeue(user, host, job_ids)
+
+            if (nrow(status_table) > 0) {
+                if (should_view) { View(status_table) }
+            } else {
+                job_ids <- paste(job_ids, collapse = ", ")
+                message(paste("No statuses found for job ids:", job_ids))
+            }
+
+            invisible(status_table)
         }
     ),
     private = list(
