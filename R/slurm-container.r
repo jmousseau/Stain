@@ -121,6 +121,14 @@ Stain <- R6::R6Class("SlurmContainer",
             remote_output_dir <- paste0(user, "@", host, ":", submit_dir, "/", output_dir)
             stain_scp(from = remote_output_dir,  to = self$dir)
         },
+        view_submission_history = function() {
+            history <- stain_sub_history(self$dir)
+
+            if (is.data.frame(history)) {
+                View(history)
+                invisible(history)
+            }
+        },
         view_statuses = function(user, host, should_view = TRUE) {
             job_ids <- stain_sub_history(self$dir)$job_id
 
