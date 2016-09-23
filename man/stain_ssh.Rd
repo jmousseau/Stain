@@ -4,7 +4,7 @@
 \alias{stain_ssh}
 \title{ssh with the Stain RSA key.}
 \usage{
-stain_ssh(user, host, cmds = "")
+stain_ssh(user, host, cmds = "", intern = FALSE)
 }
 \arguments{
 \item{user}{The user on your remote host.}
