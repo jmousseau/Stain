@@ -102,6 +102,13 @@ Stain <- R6::R6Class("SlurmContainer",
                 job_dir <- paste(submit_dir, basename(self$dir), sep = "/")
                 submit_cmd <- paste("cd", job_dir, "&& sbatch submit.slurm")
                 output <- stain_ssh(user, host, submit_cmd, intern = TRUE)
+
+                # Add the job id to submission history
+                output <- strsplit(output, " ")[[1]]
+                job_id <- as.numeric(output[length(output)])
+                stain_sub_history_append(self$dir, job_id)
+
+                message(paste("Submitted job", job_id, "to", remote_host))
             }, error = function(e) {
                 private$is_submitting = FALSE
                 stop(e)
