@@ -123,7 +123,14 @@ Stain <- R6::R6Class("SlurmContainer",
         },
         view_statuses = function(user, host, should_view = TRUE) {
             job_ids <- stain_sub_history(self$dir)$job_id
-            status_table <- stain_ssh_squeue(user, host, job_ids)
+
+            tryCatch({
+                status_table <- stain_ssh_squeue(user, host, job_ids)
+            }, warning = function(w) {
+                message(paste("No statuses found for job ids:", job_ids))
+                invisible()
+            })
+
 
             if (nrow(status_table) > 0) {
                 if (should_view) { View(status_table) }
