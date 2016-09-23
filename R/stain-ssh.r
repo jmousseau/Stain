@@ -67,7 +67,7 @@ stain_ssh_squeue <- function(user, host, job_ids) {
         csv <- csv_header
     }
 
-    status_table <- read.delim(textConnection(csv))
+    status_table <- utils::read.delim(textConnection(csv))
 
     return(status_table)
 }
@@ -119,8 +119,8 @@ stain_ssh_setup <- function(user, host) {
 
     if (Sys.info()["sysname"] == "Darwin") {
         cat("The bash command to setup remote submission has been copied to your clipboard. Run it in your terminal.")
-        write.table(cmd, file = pipe("pbcopy"), sep = "\t",
-                    col.names = F, row.names = F , quote = F)
+        utils::write.table(cmd, file = pipe("pbcopy"), sep = "\t",
+                           col.names = F, row.names = F , quote = F)
     } else {
         cat("Run the following bash command in your terminal to setup remote submission:")
         cat(cmd)

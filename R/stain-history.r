@@ -9,7 +9,7 @@ stain_sub_history <- function(dir) {
     sub_history_exists <- file.exists(sub_history_csv)
 
     if (sub_history_exists) {
-        return(read.csv(sub_history_csv, colClasses = c(
+        return(utils::read.csv(sub_history_csv, colClasses = c(
             "character", # job_id
             "character"  # submission_date
         )))
@@ -36,8 +36,8 @@ stain_sub_history_append <- function(dir, job_id, sub_date = Sys.time()) {
         submission_date = as.character(sub_date)
     )
 
-    write.table(new_entry, sub_history_csv,
-                append = sub_history_exists,
-                sep = ",", row.names = FALSE,
-                col.names = !sub_history_exists)
+    utils::write.table(new_entry, sub_history_csv,
+                       append = sub_history_exists,
+                       sep = ",", row.names = FALSE,
+                       col.names = !sub_history_exists)
 }
