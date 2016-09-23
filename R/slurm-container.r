@@ -74,7 +74,7 @@ Stain <- R6::R6Class("SlurmContainer",
                                      full.names = full.names)
             ))
         },
-        submit = function(user = private$user, host = private$host, submit_dir) {
+        submit = function(user = private$user, host = private$host, submit_dir = "~/stain") {
             private$is_submitting = TRUE
 
             tryCatch({
