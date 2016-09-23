@@ -8,6 +8,10 @@
 #'
 #' @param cmds A sting of one or more commands to run on the remote host.
 stain_ssh <- function(user, host, cmds = "", intern = FALSE) {
+    if (is.null(user) | is.null(host)) {
+        stop("No user or host specified.", call. = FALSE)
+    }
+
     if (!stain_ssh_key_exists()) {
         invisible(stain_ssh_key_gen())
     }

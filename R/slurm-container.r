@@ -74,7 +74,7 @@ Stain <- R6::R6Class("SlurmContainer",
                                      full.names = full.names)
             ))
         },
-        submit = function(user, host, submit_dir) {
+        submit = function(user = private$user, host = private$host, submit_dir) {
             private$is_submitting = TRUE
 
             tryCatch({
@@ -116,10 +116,14 @@ Stain <- R6::R6Class("SlurmContainer",
 
             private$is_submitting = FALSE
         },
-        fetch_output = function(user, host, submit_dir) {
+        fetch_output = function(user = private$user, host, submit_dir) {
             output_dir <- paste0(basename(self$dir), "/output")
             remote_output_dir <- paste0(user, "@", host, ":", submit_dir, "/", output_dir)
             stain_scp(from = remote_output_dir,  to = self$dir)
+        },
+        set_remote_host = function(user = private$user, host = private$host) {
+            private$user <- user
+            private$host <- host
         },
         view_submission_history = function() {
             history <- stain_sub_history(self$dir)
@@ -129,7 +133,7 @@ Stain <- R6::R6Class("SlurmContainer",
                 invisible(history)
             }
         },
-        view_statuses = function(user, host, should_view = TRUE) {
+        view_statuses = function(user = private$user, host = private$host, should_view = TRUE) {
             job_ids <- stain_sub_history(self$dir)$job_id
 
             tryCatch({
@@ -151,6 +155,8 @@ Stain <- R6::R6Class("SlurmContainer",
         }
     ),
     private = list(
+        user = NULL,
+        host = NULL,
         options = NULL,
         is_submitting = FALSE,
         add_files = function(files, stain_sub_dir) {
