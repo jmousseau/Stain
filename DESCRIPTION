@@ -6,8 +6,9 @@ Authors@R: as.person("Jack Mousseau <mousseau@case.edu> [cre]")
 Description: Remote slurm job submission using a "container" structure.
 Imports:
     codetools,
+    R6,
     testthat,
-    R6
+    utils
 License: MIT
 LazyData: TRUE
 RoxygenNote: 5.0.1
