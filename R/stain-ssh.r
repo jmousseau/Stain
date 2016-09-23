@@ -31,6 +31,44 @@ stain_scp <- function(from, to) {
 }
 
 
+#' Get squeue info on certain jobs.
+#'
+#' @param job_ids A collection of job ids for which to fetch statuses.
+#'
+#' @return A data frame with columns corresponding to those produced
+#' by the \code{squeue -l} command.
+stain_ssh_squeue <- function(user, host, job_ids) {
+    job_ids <- paste(job_ids, collapse = ",")
+    remote_host <- paste(user, host, sep = "@")
+
+    squeue_cmd <- paste("squeue -l -j", job_ids)
+    output <- stain_ssh(user, host, squeue_cmd, intern = TRUE)
+
+    output_table <- sapply(output, USE.NAMES = FALSE, function(row) {
+        tokens <- strsplit(row, " ")[[1]]
+        return(tokens[tokens != ""])
+    })
+
+    csv_header <- paste(output_table[[2]], collapse = "\t")
+    csv_header <-  gsub("[\r]", "", csv_header)
+
+    if (length(output_table) > 2) {
+        csv_body <- paste(lapply(output_table[3:length(output_table)], function(row) {
+            row <- paste(row, collapse = "\t")
+            row <-  gsub("[\r]", "", row)
+            return(row)
+        }), collapse = "\n")
+        csv <- paste(csv_header, csv_body, sep = "\n")
+    } else {
+        csv <- csv_header
+    }
+
+    status_table <- read.delim(textConnection(csv))
+
+    return(status_table)
+}
+
+
 #' Check for a Stain ssh key.
 #'
 #' @return If a public/private key pair exists in \code{~/.ssh/} with the name
