@@ -141,22 +141,50 @@ Stain <- R6::R6Class("SlurmContainer",
         view_statuses = function(user = private$user, host = private$host, should_view = TRUE) {
             job_ids <- stain_sub_history(self$dir)$job_id
 
-            tryCatch({
-                status_table <- stain_ssh_squeue(user, host, job_ids)
-            }, warning = function(w) {
-                message(paste("No statuses found for job ids:", job_ids))
-                invisible()
-            })
-
-
-            if (nrow(status_table) > 0) {
-                if (should_view) { View(status_table) }
-            } else {
-                job_ids <- paste(job_ids, collapse = ", ")
-                message(paste("No statuses found for job ids:", job_ids))
+            verify_state_table <- function(state_table) {
+                if (nrow(status_table) > 0) {
+                    return(state_table)
+                } else {
+                    job_ids <- paste(job_ids, collapse = ", ")
+                    message(paste("No statuses found for job ids:", job_ids))
+                }
             }
 
-            invisible(status_table)
+            fetch_squeue_table <- function() {
+                tryCatch({
+                    squeue_table <- stain_ssh_squeue(user, host, job_ids)
+                    squeue_table <- squeue_table[, c("JOBID", "STATE")]
+                    colnames(squeue_table) <- c("job_id", "state")
+                    # Will throw error if data frame has no rows.
+                    squeue_table$exit_code <- NA
+                },
+                error = function(e) {
+                    # An empty data frame without columns will successfully row
+                    # bind with any other data frame.
+                    squeue_table <- data.frame()
+                }, finally = return(squeue_table))
+            }
+
+            fetch_sacct_table <- function() {
+                tryCatch({
+                    sacct_table <- stain_ssh_sacct(user, host, job_ids)
+                    colnames(sacct_table) <- c("job_id", "state", "exit_code")
+                },
+                error = function(e) {
+                    # An empty data frame without columns will successfully row
+                    # bind with any other data frame.
+                    sacct_table <- data.frame()
+                }, finally = return(sacct_table))
+            }
+
+            squeue_table <- fetch_squeue_table()
+            sacct_table <- fetch_sacct_table()
+            states <- rbind(squeue_table, sacct_table)
+            states <- aggregate(states, list(states$job_id), function(x) {
+                na.omit(x)[1]
+            })[,-1]
+
+            return(states)
         }
     ),
     private = list(
