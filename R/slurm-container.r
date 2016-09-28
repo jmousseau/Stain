@@ -130,12 +130,12 @@ Stain <- R6::R6Class("SlurmContainer",
             private$user <- user
             private$host <- host
         },
-        view_submission_history = function() {
+        submission_history = function() {
+            # `stain_sub_history` will warn if submission history is empty.
             history <- stain_sub_history(self$dir)
 
             if (is.data.frame(history)) {
-                View(history)
-                invisible(history)
+                return(history)
             }
         },
         fetch_job_states = function(user = private$user, host = private$host) {
