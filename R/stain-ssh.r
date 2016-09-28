@@ -75,9 +75,9 @@ stain_ssh_squeue <- function(user, host, job_ids) {
         csv <- csv_header
     }
 
-    status_table <- utils::read.delim(textConnection(csv))
+    state_table <- utils::read.delim(textConnection(csv))
 
-    return(status_table)
+    return(state_table)
 }
 
 
@@ -107,14 +107,14 @@ stain_ssh_sacct <- function(user, host, job_ids) {
 
     csv_header <- output_table[1, ]
     csv_body <- output_table[-1, ]
-    status_table <- as.data.frame(csv_body)
+    state_table <- as.data.frame(csv_body)
 
-    if (nrow(status_table) > 0) {
-        colnames(status_table) <- csv_header
-        status_table <- status_table[seq(1, length(status_table[, 1]), by = 2), ]
+    if (nrow(state_table) > 0) {
+        colnames(state_table) <- csv_header
+        state_table <- state_table[seq(1, length(state_table[, 1]), by = 2), ]
     }
 
-    return(status_table)
+    return(state_table)
 }
 
 

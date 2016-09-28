@@ -138,7 +138,7 @@ Stain <- R6::R6Class("SlurmContainer",
                 invisible(history)
             }
         },
-        view_statuses = function(user = private$user, host = private$host, should_view = TRUE) {
+        fetch_job_states = function(user = private$user, host = private$host) {
             job_ids <- stain_sub_history(self$dir)$job_id
 
             verify_state_table <- function(state_table) {
