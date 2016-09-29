@@ -1,7 +1,7 @@
 Package: Stain
 Type: Package
 Title: SLURM Containers
-Version: 0.6.0
+Version: 0.7.0
 Authors@R: as.person("Jack Mousseau <mousseau@case.edu> [cre]")
 Description: Remote slurm job submission using a "container" structure.
 Imports:
