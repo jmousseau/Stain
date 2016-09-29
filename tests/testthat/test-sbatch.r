@@ -50,7 +50,17 @@ test_that("Multiple sbatch mail type options are combined while other options
 
 test_that("Dependency list macros are replaced with correct job ids.", {
     job_history <- c("1", "2", "3", "4")
+
+    expect_equal(sbatch_dependency_list("after:PREVIOUS(1)", job_history),
+                 "after:4")
     expect_equal(sbatch_dependency_list("after:PREVIOUS(2)", job_history),
                  "after:4:3")
-
+    expect_equal(sbatch_dependency_list("after:PREVIOUS(3)", job_history),
+                 "after:4:3:2")
+    expect_equal(sbatch_dependency_list("after:PREVIOUS(4)", job_history),
+                 "after:4:3:2:1")
+    expect_equal(sbatch_dependency_list("after:PREVIOUS(5)", job_history),
+                 "after:4:3:2:1")
+    expect_equal(sbatch_dependency_list("after:PREVIOUS(ALL)", job_history),
+                 "after:4:3:2:1")
 })
