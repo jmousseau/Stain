@@ -150,6 +150,9 @@ stain_ssh_key_gen <- function(overwrite = FALSE) {
 #' the key to \code{~/.ssh/authorized_keys}. This function will autogenerate
 #' the necessary bash code to complete these steps.
 #'
+#' @note The generated bash code will ask you for your remote host password
+#' twice. This is expected.
+#'
 #' @param user The user on your remote host.
 #'
 #' @param host The static ip address or url for the remote host.

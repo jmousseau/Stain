@@ -21,4 +21,8 @@ process requires two steps. 1) To \code{scp} the public key and 2) to add
 the key to \code{~/.ssh/authorized_keys}. This function will autogenerate
 the necessary bash code to complete these steps.
 }
+\note{
+The generated bash code will ask you for your remote host password
+twice. This is expected.
+}
 
