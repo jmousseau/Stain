@@ -168,7 +168,7 @@ sbatch_dependency_list <- function(dep_list, job_id_sub_history) {
 
         prev_n_jobs <- function(n) {
             job_ids <- job_id_sub_history[1:n]
-            is.na(job_ids) <- NULL
+            job_ids <- job_ids[!is.na(job_ids)]
             return(paste(job_ids, collapse = ":"))
         }
 
