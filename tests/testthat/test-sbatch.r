@@ -9,7 +9,7 @@ test_that("All options are formated correctly", {
     expect_equal(sbatch_opts$memory(1200), "--mem=1200")
     expect_equal(sbatch_opts$memory("16g"), "--mem=16g")
     expect_equal(sbatch_opts$nodes(1), "--nodes=1")
-    expect_equal(sbatch_opts$ouput("file.txt"), "--ouput=file.txt")
+    expect_equal(sbatch_opts$output("file.txt"), "--output=file.txt")
     expect_equal(sbatch_opts$time("00:00:01"), "--time=00:00:01")
 })
 
@@ -46,4 +46,11 @@ test_that("Multiple sbatch mail type options are combined while other options
     )
 
     expect_equal(sbatch_mail_type_combine(opts), expected)
+})
+
+test_that("Dependency list macros are replaced with correct job ids.", {
+    job_history <- c("1", "2", "3", "4")
+    expect_equal(sbatch_dependency_list("after:PREVIOUS(2)", job_history),
+                 "after:4:3")
+
 })

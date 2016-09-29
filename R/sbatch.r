@@ -174,8 +174,8 @@ sbatch_dependency_list <- function(dep_list, job_id_sub_history) {
 
         to_replace$replacement <- sapply(to_replace$n, prev_n_jobs)
 
-        for (row in to_replace) {
-            print(row)
+        for (i in length(to_replace$replacement)) {
+            row <- to_replace[i, ]
             dep_list <- gsub(row$regexp, row$replacement, dep_list)
         }
     }
