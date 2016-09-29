@@ -7,6 +7,7 @@ Description: Remote slurm job submission using a "container" structure.
 Imports:
     codetools,
     R6,
+    stringr,
     testthat,
     utils
 License: MIT

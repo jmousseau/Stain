@@ -133,3 +133,55 @@ sbatch_mail_type_combine <- function(opts) {
     return(c(opts[-mail_type_opts], mail_type_opt))
 }
 
+
+#' Fill in dependency list placeholders.
+#'
+#' The placeholders \code{PREVIOUS(ALL)} and \code{PREVIOUS(<n>)} can be used in
+#' a sbatch dependency list and are replaced by all or n of the previous
+#' submission job ids.
+#'
+#' @param dep_list The string dependency list value of the key-value pair
+#' for a sbatch dependency list options.
+#'
+#' @param job_id_sub_history An array of job ids ordered oldest to newest.
+#'
+#' @return A dependency list with the proper job ids in the list.
+sbatch_dependency_list <- function(dep_list, job_id_sub_history) {
+    # Order from newest to oldest.
+    job_id_sub_history <- rev(job_id_sub_history)
+
+    regex <- "PREVIOUS[(]([1-9]+)[)]"
+    to_replace <- stringr::str_match_all(dep_list, regex)[[1]]
+
+    if (length(to_replace) > 0) {
+        to_replace <- as.data.frame(to_replace)
+        colnames(to_replace) <- c("regexp", "n")
+        to_replace$n <- as.numeric(as.character(to_replace$n))
+        to_replace$regexp <- as.character(to_replace$regexp)
+
+        # Create a literal parentheses regex expression.
+        to_replace$regexp <- sapply(to_replace$regexp, function(exp) {
+            exp <- gsub("[(]", "[(]", exp)
+            exp <- gsub("[)]", "[)]", exp)
+            return(exp)
+        })
+
+        prev_n_jobs <- function(n) {
+            job_ids <- job_id_sub_history[1:n]
+            is.na(job_ids) <- NULL
+            return(paste(job_ids, collapse = ":"))
+        }
+
+        to_replace$replacement <- sapply(to_replace$n, prev_n_jobs)
+
+        for (row in to_replace) {
+            print(row)
+            dep_list <- gsub(row$regexp, row$replacement, dep_list)
+        }
+    }
+
+    regex <- "PREVIOUS[(]ALL[)]"
+    dep_list <- gsub(regex, paste(job_id_sub_history, collapse = ":"), dep_list)
+
+    return(dep_list)
+}
