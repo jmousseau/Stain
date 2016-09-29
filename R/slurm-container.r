@@ -79,7 +79,8 @@ Stain <- R6::R6Class("SlurmContainer",
                                      full.names = full.names)
             ))
         },
-        submit = function(user = private$user, host = private$host, submit_dir = "~/stain") {
+        submit = function(user = private$user, host = private$host,
+                          submit_dir = "~/stain", dependency_list = "") {
             private$is_submitting = TRUE
 
             tryCatch({
@@ -105,7 +106,13 @@ Stain <- R6::R6Class("SlurmContainer",
 
                 message("Submitting job...")
                 job_dir <- paste(submit_dir, basename(self$dir), sep = "/")
-                submit_cmd <- paste("cd", job_dir, "&& sbatch submit.slurm")
+
+                # Add any dependencies to sbatch command.
+                history <- self$submission_history()$job_id
+                dependencies <- sbatch_dependency_list(dependency_list, history)
+                submit_cmd <- paste("sbatch submit.slurm",
+                                    sbatch_opt("-d", dependencies))
+                submit_cmd <- paste("cd", job_dir, "&&", submit_cmd)
                 output <- stain_ssh(user, host, submit_cmd, intern = TRUE)
 
                 # Add the job id to submission history
