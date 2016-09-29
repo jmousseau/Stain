@@ -150,6 +150,10 @@ sbatch_dependency_list <- function(dep_list, job_id_sub_history) {
     # Order from newest to oldest.
     job_id_sub_history <- rev(job_id_sub_history)
 
+    if (length(job_id_sub_history) == 0) {
+        return("")
+    }
+
     regex <- "PREVIOUS[(]([1-9]+)[)]"
     to_replace <- stringr::str_match_all(dep_list, regex)[[1]]
 

@@ -110,8 +110,13 @@ Stain <- R6::R6Class("SlurmContainer",
                 # Add any dependencies to sbatch command.
                 history <- self$submission_history()$job_id
                 dependencies <- sbatch_dependency_list(dependency_list, history)
+
+                if (nchar(dependencies) > 0) {
+                    dependencies <- sbatch_opt("dependency")(dependencies)
+                }
+
                 submit_cmd <- paste("sbatch",
-                                    sbatch_opt("dependency")(dependencies),
+                                    dependencies,
                                     "submit.slurm")
                 submit_cmd <- paste("cd", job_dir, "&&", submit_cmd)
                 output <- stain_ssh(user, host, submit_cmd, intern = TRUE)

@@ -63,4 +63,5 @@ test_that("Dependency list macros are replaced with correct job ids.", {
                  "after:4:3:2:1")
     expect_equal(sbatch_dependency_list("after:PREVIOUS(ALL)", job_history),
                  "after:4:3:2:1")
+    expect_equal(sbatch_dependency_list("ANY-STRING", c()), "")
 })
