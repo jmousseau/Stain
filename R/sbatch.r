@@ -88,7 +88,7 @@ sbatch_opts <- list (
     mail_user = sbatch_opt("mail-user"),
     memory = sbatch_opt("mem"),
     nodes = sbatch_opt("nodes"),
-    ouput = sbatch_opt("ouput"),
+    output = sbatch_opt("output"),
     time = sbatch_opt("time")
 )
 
