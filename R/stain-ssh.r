@@ -158,9 +158,9 @@ stain_ssh_key_gen <- function(overwrite = FALSE) {
 #' @export
 stain_ssh_setup <- function(user, host) {
     remote_host <- paste(user, host, sep = "@")
-    scp <- paste0("scp ~/.ssh/stain_rsa.pub", remote_host, ":~/.ssh/stain_rsa.pub")
-    ssh <- paste0("ssh ", scp, " 'echo `cat ~/.ssh/stain_rsa.pub` >> ~/.ssh/authorized_keys'")
-    cmd <- paste0(scp, " && ", ssh)
+    scp <- paste0("scp ~/.ssh/stain_rsa.pub ", remote_host, ":~/.ssh/stain_rsa.pub")
+    ssh <- paste("ssh", remote_host, "'echo `cat ~/.ssh/stain_rsa.pub` >> ~/.ssh/authorized_keys'")
+    cmd <- paste(scp, "&&", ssh)
 
     if (Sys.info()["sysname"] == "Darwin") {
         cat("The bash command to setup remote submission has been copied to your clipboard. Run it in your terminal.")
