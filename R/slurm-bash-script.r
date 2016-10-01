@@ -41,7 +41,9 @@ R CMD BATCH ./.stain/sources/.default_stain_main.R
 
 rm -rf ./data ./.stain
 
-cp -r * $SLURM_SUBMIT_DIR/output"
+cp -r * $SLURM_SUBMIT_DIR/output
+
+rm -rf *"
 
             write(paste(private$options$for_slurm_script(), contents, sep = "\n"),
                   file = paste(dir, "submit.slurm", sep = "/"))
