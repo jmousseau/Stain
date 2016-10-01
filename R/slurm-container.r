@@ -152,7 +152,8 @@ Stain <- R6::R6Class("SlurmContainer",
             }
         },
         fetch_job_states = function(user = private$user, host = private$host) {
-            job_ids <- stain_sub_history(self$dir)$job_id
+            submission_history <- stain_sub_history(self$dir)
+            job_ids <- submission_history$job_id
 
             verify_state_table <- function(state_table) {
                 if (nrow(status_table) > 0) {
@@ -197,7 +198,7 @@ Stain <- R6::R6Class("SlurmContainer",
                 na.omit(x)[1]
             })[,-1]
 
-            return(states)
+            return(merge(states, submission_history))
         }
     ),
     private = list(
