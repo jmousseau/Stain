@@ -6,6 +6,7 @@ Authors@R: as.person("Jack Mousseau <mousseau@case.edu> [cre]")
 Description: Remote slurm job submission using a "container" structure.
 Imports:
     codetools,
+    jsonlite,
     R6,
     stringr,
     testthat,
