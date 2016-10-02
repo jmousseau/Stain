@@ -29,6 +29,8 @@ Stain <- R6::R6Class("SlurmContainer",
                                recursive = TRUE, showWarnings = FALSE)
                 }
 
+                stain_meta_create(dir)
+
                 script <- SlurmBashScript$new(dir, private$options)
             }
         },
@@ -108,7 +110,7 @@ Stain <- R6::R6Class("SlurmContainer",
                 job_dir <- paste(submit_dir, basename(self$dir), sep = "/")
 
                 # Add any dependencies to sbatch command.
-                history <- self$submission_history()$job_id
+                history <- self$submission_history(quiet = TRUE)$job_id
                 dependencies <- sbatch_dependency_list(dependency_list, history)
 
                 if (nchar(dependencies) > 0) {
@@ -124,7 +126,7 @@ Stain <- R6::R6Class("SlurmContainer",
                 # Add the job id to submission history
                 output <- strsplit(output, " ")[[1]]
                 job_id <- as.numeric(output[length(output)])
-                stain_sub_history_append(self$dir, job_id)
+                stain_meta_sub_history_append(self$dir, job_id)
 
                 message(paste("Submitted job", job_id, "to", remote_host))
             }, error = function(e) {
@@ -143,16 +145,23 @@ Stain <- R6::R6Class("SlurmContainer",
             private$user <- user
             private$host <- host
         },
-        submission_history = function() {
-            # `stain_sub_history` will warn if submission history is empty.
-            history <- stain_sub_history(self$dir)
+        submission_history = function(quiet = FALSE) {
+            tryCatch({
+                history <- stain_meta_read(self$dir)$submission_history
 
-            if (is.data.frame(history)) {
-                return(history)
-            }
+                if (is.null(history)) {
+                    if (!quiet) {
+                        message("No submission history.")
+                    }
+                } else {
+                    return(stain_meta_read(self$dir)$submission_history)
+                }
+            }, error = function(e) {
+                stop("Error fetching submission history.", call. = FALSE)
+            })
         },
         fetch_job_states = function(user = private$user, host = private$host) {
-            submission_history <- stain_sub_history(self$dir)
+            submission_history <- self$submission_history(quiet = TRUE)
             job_ids <- submission_history$job_id
 
             verify_state_table <- function(state_table) {
