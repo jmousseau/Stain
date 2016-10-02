@@ -21,7 +21,7 @@ Stain <- R6::R6Class("SlurmContainer",
                 private$update_globals()
             } else {
                 name <- paste0("job_", private$rand_alphanumeric())
-                dir <- paste(getwd(), dir, name, sep = "/")
+                dir <- paste(getwd(), dir, name, "", sep = "/")
                 self$dir <- dir
 
                 for (sub_dir in sub_dirs) {
