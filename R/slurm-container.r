@@ -136,7 +136,7 @@ Stain <- R6::R6Class("SlurmContainer",
 
             private$is_submitting = FALSE
         },
-        fetch_output = function(user = private$user, host, submit_dir = "~/stain") {
+        fetch_output = function(user = private$user, host = private$host, submit_dir = "~/stain") {
             output_dir <- paste0(basename(self$dir), "/output")
             remote_output_dir <- paste0(user, "@", host, ":", submit_dir, "/", output_dir)
             stain_scp(from = remote_output_dir,  to = self$dir)
