@@ -126,12 +126,15 @@ sbatch_mail_type_combine <- function(opts) {
     opt_keys <- sapply(opts, sbatch_opt_key, USE.NAMES = FALSE)
     mail_type_opts <- which(opt_keys == "mail-type")
 
-    mail_type_opt_vals <- sapply(opts[mail_type_opts], sbatch_opt_value,
-                                 USE.NAMES = FALSE)
-    mail_type_opt_val <- paste(unique(mail_type_opt_vals), collapse = ",")
-    mail_type_opt <- sbatch_opt("mail-type")(mail_type_opt_val)
-
-    return(c(opts[-mail_type_opts], mail_type_opt))
+    if (length(mail_type_opts) > 0) {
+        mail_type_opt_vals <- sapply(opts[mail_type_opts], sbatch_opt_value,
+                                     USE.NAMES = FALSE)
+        mail_type_opt_val <- paste(unique(mail_type_opt_vals), collapse = ",")
+        mail_type_opt <- sbatch_opt("mail-type")(mail_type_opt_val)
+        return(c(opts[-mail_type_opts], mail_type_opt))
+    } else {
+        return(opts)
+    }
 }
 
 
