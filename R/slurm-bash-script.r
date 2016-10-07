@@ -1,52 +1,65 @@
-#' SlurmBashScript R6 object.
+#' Write the stain slurm submission script
 #'
-#' Generates the necessary bash script to submit through
-#' the `sbatch` command.
-SlurmBashScript <- R6::R6Class("SlurmBashScript",
-    public = list(
-        initialize = function(container_dir, options) {
-            private$options <- options
-
-            private$cat_main_file_magic(container_dir)
-            private$write_slurm_script(container_dir)
+#' @param dir The location of the \code{.stain/} directory.
+stain_bash_slurm_write <- function(dir) {
+    # Use to conditionally write a line of file.
+    wl_if <- function(line, should_write = TRUE) {
+        if (should_write) {
+            cat(line, file = paste0(dir, "/submit.slurm"),
+                append = TRUE, sep = "\n")
         }
-    ),
-    private = list(
-        options = NA,
-        cat_main_file_magic = function(dir) {
-            main_file <- ".default_stain_main.R"
-            file <- paste0(dir, "/.stain/sources/", main_file)
-            sourcing <- paste("sapply(list.files('./.stain/sources', full.names = TRUE)[!(list.files('./.stain/sources')) %in%",
-                              paste0("'", main_file, "'"), "], source)")
-            loading <- paste("sapply(list.files('./.stain/objects', full.names = TRUE),
-                             function(file) { load(file, env = .GlobalEnv) })")
-            running_main <- "main()"
+    }
 
-            cat("\n\n", sourcing, loading, running_main, file = file, append = TRUE, sep = "\n")
-        },
-        write_slurm_script = function(dir) {
-            contents <- "#!/bin/bash
+    wl_if("#!/bin/bash")
 
-# copy necessary files over
-cp -r ./.stain $PFSDIR
-mkdir ./output
-cd $PFSDIR
+    # Copy necessary files to submission directory.
+    wl_if("cp -r ./.stain $PFSDIR")
+    wl_if("mkdir ./output")
 
-mkdir ./data
-mv ./.stain/data/* ./data
+    wl_if("cd $PFSDIR")
 
-module load hpc-ods
-module load pandoc
+    wl_if("mkdir ./data")
+    wl_if("mv ./.stain/data/* ./data")
 
-R CMD BATCH ./.stain/sources/.default_stain_main.R
+    # Load the necessary modules.
+    wl_if("module load hpc-ods")
+    wl_if("module load pandoc")
 
-rm -rf ./data ./.stain
+    # Run the default main script.
+    wl_if("R CMD BATCH ./.stain/sources/.default_stain_main.R")
 
-cp -r * $SLURM_SUBMIT_DIR/output
+    # Remove the unimportant folders.
+    wl_if("rm -rf ./data ./.stain")
 
-rm -rf *"
+    # Now copy back the output.
+    wl_if("cp -r * $SLURM_SUBMIT_DIR/output")
 
-            write(contents, file = paste(dir, "submit.slurm", sep = "/"))
-        }
-    )
-)
+    # Clean up.
+    wl_if("rm -rf *")
+}
+
+
+#' Write the default main R file.
+#'
+#' @param dir The location of the \code{.stain/} directory.
+stain_default_main_write <- function(dir) {
+    wl <- function(line) {
+        main_file <- paste0(dir, "/.stain/sources/.default_stain_main.R")
+        cat(line, file = main_file, append = TRUE, sep = "\n")
+    }
+
+    wl("all_sources <- list.files('./.stain/sources', full.names = TRUE)")
+
+    # Source all the sources.
+    wl("sources <- list.files('./.stain/sources')")
+    wl("sources <- all_sources[!(sources %in% '.default_stain_main.R')]")
+    wl("sapply(sources, source)")
+
+    # Load all the objects into the global environment.
+    wl("all_objects <- list.files('./.stain/objects', full.names = TRUE)")
+    wl("load_object <- function(file) { load(file, env = .GlobalEnv) }")
+    wl("sapply(all_objects, load_object)")
+
+    # Run main function.
+    wl("main()")
+}

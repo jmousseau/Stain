@@ -34,7 +34,9 @@ Stain <- R6::R6Class("SlurmContainer",
 
                 stain_meta_create(dir)
 
-                script <- SlurmBashScript$new(dir, private$options)
+                # Write the necessary "helper" scripts.
+                stain_bash_slurm_write(dir)
+                stain_default_main_write(dir)
             }
 
             self$set_sbatch_opts(options)
