@@ -36,6 +36,9 @@ Stain <- R6::R6Class("SlurmContainer",
 
                 script <- SlurmBashScript$new(dir, private$options)
             }
+
+            self$set_sbatch_opts(options)
+            private$options <- stain_meta_sbatch_opts_read(self$dir)
         },
         add_sources = function(files) {
             private$add_files(files, "sources")
@@ -214,6 +217,16 @@ Stain <- R6::R6Class("SlurmContainer",
             })[,-1]
 
             return(merge(states, submission_history))
+        },
+        # This function takes formatted sbatch options as input.
+        set_sbatch_opts = function(opts) {
+            opts <- sbatch_mail_type_combine(opts)
+            options <- sapply(opts, sbatch_opt_key, USE.NAMES = FALSE)
+            params <- sapply(opts, sbatch_opt_value, USE.NAMES = FALSE)
+
+            for (i in 1:length(options)) {
+                stain_meta_set_sbatch_opt(self$dir, options[i], params[i])
+            }
         }
     ),
     private = list(
