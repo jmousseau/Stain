@@ -124,7 +124,7 @@ sbatch_mail_type_opts <- list(
 #' @param opts A list of sbatch mail type options.
 sbatch_mail_type_combine <- function(opts) {
     opt_keys <- sapply(opts, sbatch_opt_key, USE.NAMES = FALSE)
-    mail_type_opts <- which(opt_keys == "--mail-type")
+    mail_type_opts <- which(opt_keys == "mail-type")
 
     mail_type_opt_vals <- sapply(opts[mail_type_opts], sbatch_opt_value,
                                  USE.NAMES = FALSE)
