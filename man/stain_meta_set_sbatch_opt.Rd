@@ -13,6 +13,9 @@ stain_meta_set_sbatch_opt(dir, opt, param)
 
 \item{param}{The value for the sbatch option.}
 }
+\value{
+A single string of sbatch options ready for the command line.
+}
 \description{
 Set a sbatch option parameter.
 }

@@ -85,6 +85,8 @@ stain_meta_set_stain_version <- function(dir, stain_version) {
 #' @param opt The sbatch option key.
 #'
 #' @param param The value for the sbatch option.
+#'
+#' @return A single string of sbatch options ready for the command line.
 stain_meta_set_sbatch_opt <- function(dir, opt, param) {
     meta <- stain_meta_read(dir)
     sbatch_options <- meta$sbatch_options
