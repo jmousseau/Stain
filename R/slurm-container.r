@@ -51,7 +51,7 @@ Stain <- R6::R6Class("SlurmContainer",
             private$remove_files(basenames, "data")
         },
         cancel = function(job_ids, user = private$user, host = private$host) {
-            job_ids <- paste(job_ids, collapse = ",")
+            job_ids <- paste(job_ids, collapse = " ")
 
             stain_ssh(user, host, paste("scancel", job_ids))
         },
