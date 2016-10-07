@@ -137,8 +137,7 @@ sbatch_mail_type_combine <- function(opts) {
 
 #' Format the sbatch options for command line use.
 #'
-#' @param sbatch_options A data table with two columns, \code{option} and
-#' \code{param}.
+#' @param opts A collection of sbatch formatted options.
 sbatch_opts_format_cmd_line <- function(opts) {
     return(paste0(opts, collapse = " "))
 }

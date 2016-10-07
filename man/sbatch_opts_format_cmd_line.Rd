@@ -7,8 +7,7 @@
 sbatch_opts_format_cmd_line(opts)
 }
 \arguments{
-\item{sbatch_options}{A data table with two columns, \code{option} and
-\code{param}.}
+\item{opts}{A collection of sbatch formatted options.}
 }
 \description{
 Format the sbatch options for command line use.
