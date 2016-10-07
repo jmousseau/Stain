@@ -111,6 +111,23 @@ stain_meta_set_sbatch_opt <- function(dir, opt, param) {
 }
 
 
+#' Get the sbatch options in meta file.
+#'
+#' @param dir The location of the \code{.stain/} directory.
+#'
+#' @return A collection of sbatch options formatted by \code{sbatch_opt}.
+stain_meta_sbatch_opts_read <- function(dir) {
+    meta <- stain_meta_read(dir)
+    opts_df <- meta$sbatch_options
+
+    if (is.null(opts_df)) {
+        invisible()
+    } else {
+        return(sbatch_opt(opts_df$option)(opts_df$param))
+    }
+}
+
+
 #' Append a new submission history row.
 #'
 #' @param dir The location of the \code{.stain/} directory.
