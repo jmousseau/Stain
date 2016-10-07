@@ -135,6 +135,15 @@ sbatch_mail_type_combine <- function(opts) {
 }
 
 
+#' Format the sbatch options for command line use.
+#'
+#' @param sbatch_options A data table with two columns, \code{option} and
+#' \code{param}.
+sbatch_opts_format_cmd_line <- function(opts) {
+    return(paste0(opts, collapse = " "))
+}
+
+
 #' Fill in dependency list placeholders.
 #'
 #' The placeholders \code{PREVIOUS(ALL)} and \code{PREVIOUS(<n>)} can be used in
