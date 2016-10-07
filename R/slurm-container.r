@@ -9,8 +9,11 @@ Stain <- R6::R6Class("SlurmContainer",
     public = list(
         dir = NULL,
         globals = list(),
-        initialize = function(dir = ".", options = c()) {
-            private$options <- SlurmOptions$new(options)
+        initialize = function(dir = ".",
+                              options = c(sbatch_opts$nodes(1),
+                                          sbatch_opts$memory("8g"),
+                                          sbatch_opts$cpus_per_task(1),
+                                          sbatch_opts$time("00:30:00"))) {
 
             sub_dirs <- c("data", "sources", "objects")
             stain_dir <- paste0(dir, ".stain")
@@ -117,7 +120,10 @@ Stain <- R6::R6Class("SlurmContainer",
                     dependencies <- sbatch_opt("dependency")(dependencies)
                 }
 
+                sbatch_opts <- stain_meta_sbatch_opts_read(self$dir)
+                sbatch_opts <- sbatch_opts_format_cmd_line(sbatch_opts)
                 submit_cmd <- paste("sbatch",
+                                    sbatch_opts,
                                     dependencies,
                                     "submit.slurm")
                 submit_cmd <- paste("cd", job_dir, "&&", submit_cmd)
