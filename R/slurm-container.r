@@ -9,11 +9,7 @@ Stain <- R6::R6Class("SlurmContainer",
     public = list(
         dir = NULL,
         globals = list(),
-        initialize = function(dir = ".",
-                              options = c(sbatch_opts$nodes(1),
-                                          sbatch_opts$memory("8g"),
-                                          sbatch_opts$cpus_per_task(1),
-                                          sbatch_opts$time("00:30:00"))) {
+        initialize = function(dir = ".", options = c()){
 
             sub_dirs <- c("data", "sources", "objects")
             stain_dir <- paste0(dir, ".stain")
@@ -33,10 +29,28 @@ Stain <- R6::R6Class("SlurmContainer",
                 }
 
                 stain_meta_create(dir)
+                stain_meta_set_id(dir, private$rand_alphanumeric(64))
 
                 # Write the necessary "helper" scripts.
                 stain_bash_slurm_write(dir)
                 stain_default_main_write(dir)
+            }
+
+            default_opts <- c(sbatch_opts$nodes(1),
+                              sbatch_opts$memory("8g"),
+                              sbatch_opts$cpus_per_task(1),
+                              sbatch_opts$time("00:30:00"))
+
+            if (is.null(options)) {
+                options <- default_opts
+            } else {
+                for (opt in options) {
+                    if (sbatch_opt_key(opt) == "mail-type") {
+                        options <- c(options, opt)
+                    } else {
+                        options <- sbatch_opts_insert(opt, default_opts)
+                    }
+                }
             }
 
             self$set_sbatch_opts(options)
