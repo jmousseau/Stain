@@ -58,7 +58,8 @@ sbatch_opts_insert <- function(opt, opts = c()) {
 #'
 #' @return The \code{opt}'s key.
 sbatch_opt_key <- function(opt) {
-    return(strsplit(opt, "=")[[1]][1])
+    key <- strsplit(opt, "=")[[1]][1]
+    return(substr(key, 3, nchar(key)))
 }
 
 
