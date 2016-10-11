@@ -29,12 +29,20 @@ Stain <- R6::R6Class("SlurmContainer",
                 }
 
                 stain_meta_create(dir)
-                stain_meta_set_id(dir, private$rand_alphanumeric(64))
+                uuid <- system("uuidgen", intern = TRUE)
+                stain_meta_set_id(dir, uuid)
 
                 # Write the necessary "helper" scripts.
                 stain_bash_slurm_write(dir)
                 stain_default_main_write(dir)
+
+                # Create a log file.
+                create_slog_file(self)
             }
+
+            # Set the current stain object.
+            .GlobalEnv$.__current_stain_object__ <- self
+            private$add_object(".__current_stain_object__", self)
 
             default_opts <- c(sbatch_opts$nodes(1),
                               sbatch_opts$memory("8g"),
@@ -245,7 +253,7 @@ Stain <- R6::R6Class("SlurmContainer",
             }
         },
         get_id = function() {
-            return(stain_meta_read(stain$dir)$id)
+            return(stain_meta_read(self$dir)$id)
         }
     ),
     private = list(

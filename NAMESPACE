@@ -3,4 +3,5 @@
 export(Stain)
 export(sbatch_mail_type_opts)
 export(sbatch_opts)
+export(slog)
 export(stain_ssh_setup)
