@@ -243,6 +243,9 @@ Stain <- R6::R6Class("SlurmContainer",
             for (i in 1:length(options)) {
                 stain_meta_set_sbatch_opt(self$dir, options[i], params[i])
             }
+        },
+        get_id = function() {
+            return(stain_meta_read(stain$dir)$id)
         }
     ),
     private = list(
