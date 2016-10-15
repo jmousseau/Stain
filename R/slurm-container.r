@@ -19,7 +19,7 @@ Stain <- R6::R6Class("SlurmContainer",
                 self$dir <- dir
                 private$update_globals()
             } else {
-                name <- paste0("job_", private$rand_alphanumeric())
+                name <- paste0("job_", rand_alphanumeric())
                 dir <- paste(getwd(), dir, name, "", sep = "/")
                 self$dir <- dir
 
@@ -348,11 +348,6 @@ Stain <- R6::R6Class("SlurmContainer",
             for (name in names(self$globals)) {
                 private$add_object(name, self$globals[[name]])
             }
-        },
-        rand_alphanumeric = function(len = 3) {
-            population <- c(rep(0:9, each = 5), LETTERS, letters)
-            samp <- sample(population, len, replace = TRUE)
-            return(paste(samp, collapse = ''))
         }
     )
 )
