@@ -26,7 +26,10 @@ stain_bash_slurm_write <- function(dir) {
     wl_if("module load pandoc")
 
     # Run the default main script.
-    wl_if("R CMD BATCH ./.stain/sources/.default_stain_main.R")
+    wl_if("R CMD BATCH ./.stain/sources/.default_stain_main.R $1")
+
+    # Copy back the log files.
+    wl_if("cp -r ./.stain/logs $SLURM_SUBMIT_DIR/.stain/")
 
     # Remove the unimportant folders.
     wl_if("rm -rf ./data ./.stain")

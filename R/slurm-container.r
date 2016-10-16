@@ -125,9 +125,10 @@ Stain <- R6::R6Class("SlurmContainer",
             })
 
             tryCatch({
-                # Set the current stain object.
-                .GlobalEnv$.__current_stain_log__ <- self
-                private$add_object(".__current_stain_log__", self)
+                # Create a log file.
+                log_id  <- create_slog_file(self)
+                log_file <- paste0("./.stain/logs/", self$get_id(),
+                                   "/", log_id, ".txt")
 
                 message("Uploading components...")
                 remote_host <- paste0(user, "@", host, ":", submit_dir)
@@ -149,7 +150,8 @@ Stain <- R6::R6Class("SlurmContainer",
                 submit_cmd <- paste("sbatch",
                                     sbatch_opts,
                                     dependencies,
-                                    "submit.slurm")
+                                    "submit.slurm",
+                                    log_file)
                 submit_cmd <- paste("cd", job_dir, "&&", submit_cmd)
                 output <- stain_ssh(user, host, submit_cmd, intern = TRUE)
 
@@ -157,8 +159,6 @@ Stain <- R6::R6Class("SlurmContainer",
                 output <- strsplit(output, " ")[[1]]
                 job_id <- as.numeric(output[length(output)])
 
-                # Create a log file.
-                log_id  <- create_slog_file(self)
                 stain_meta_sub_history_append(self$dir, job_id, log_id)
 
                 message(paste("Submitted job", job_id, "to", remote_host))
@@ -168,6 +168,11 @@ Stain <- R6::R6Class("SlurmContainer",
             })
 
             private$is_submitting = FALSE
+        },
+        fetch_logs = function(user = private$user, host = private$host, submit_dir = "~/stain") {
+            log_dir <- paste0(basename(self$dir), "/.stain/logs")
+            remote_output_dir <- paste0(user, "@", host, ":", submit_dir, "/", log_dir)
+            stain_scp(from = remote_output_dir,  to = paste0(self$dir, ".stain/"))
         },
         fetch_output = function(user = private$user, host = private$host, submit_dir = "~/stain") {
             output_dir <- paste0(basename(self$dir), "/output")

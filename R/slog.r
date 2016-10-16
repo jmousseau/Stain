@@ -1,25 +1,3 @@
-#' Slurm Logging
-#'
-#' A log can be kept for a certain slurm job. A Stain object must be provided or
-#' else the \code{.__current_stain_object__} will be used
-#'
-#' @param ... Zero or more objects which can be coerced to character.
-#'
-#' @param slog_file A path to a log file Defaults to
-#' \code{.__current_stain_log__}.
-#'
-#' @export
-slog <- function(..., slog_file = .__current_stain_log__) {
-    args <- list(...)
-
-    for (arg in args) {
-        cat(arg, file = slog_file, append = TRUE, sep = "\n")
-    }
-
-    invisible()
-}
-
-
 #' Create Slum Logging File
 #'
 #' @param stain A Stain object.
