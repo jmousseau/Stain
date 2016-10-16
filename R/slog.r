@@ -5,13 +5,12 @@
 #'
 #' @param ... Zero or more objects which can be coerced to character.
 #'
-#' @param stain A Stain object. Defaults to \code{.__current_stain_object__}.
+#' @param slog_file A path to a log file Defaults to
+#' \code{.__current_stain_log__}.
 #'
 #' @export
-slog <- function(..., stain = .__current_stain_object__) {
+slog <- function(..., slog_file = .__current_stain_log__) {
     args <- list(...)
-
-    slog_file <- slog_file(stain)
 
     for (arg in args) {
         cat(arg, file = slog_file, append = TRUE, sep = "\n")
@@ -25,17 +24,21 @@ slog <- function(..., stain = .__current_stain_object__) {
 #'
 #' @param stain A Stain object.
 create_slog_file <- function(stain) {
-    slog_file <- slog_file(stain)
+    log_id <- rand_alphanumeric(12)
+    slog_file <- slog_file(stain, log_id)
     dir.create(dirname(slog_file), recursive = TRUE)
     file.create(slog_file)
+    return(log_id)
 }
 
 
 #' Slurm Logging File
 #'
 #' @param stain A Stain object.
-slog_file <- function(stain) {
-    path <- paste0(stain$get_id(), ".txt")
-    path <- paste(stain$dir, ".stain", "logs", path, sep = "/")
+#'
+#' @param log_id A unique identifier for the log file.
+slog_file <- function(stain, log_id) {
+    file <- paste0(log_id, ".txt")
+    path <- paste(stain$dir, ".stain", "logs",stain$get_id(), file, sep = "/")
     return(path)
 }

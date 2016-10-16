@@ -4,10 +4,12 @@
 \alias{slog_file}
 \title{Slurm Logging File}
 \usage{
-slog_file(stain)
+slog_file(stain, log_id)
 }
 \arguments{
 \item{stain}{A Stain object.}
+
+\item{log_id}{A unique identifier for the log file.}
 }
 \description{
 Slurm Logging File

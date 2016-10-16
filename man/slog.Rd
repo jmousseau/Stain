@@ -4,12 +4,13 @@
 \alias{slog}
 \title{Slurm Logging}
 \usage{
-slog(..., stain = .__current_stain_object__)
+slog(..., slog_file = .__current_stain_log__)
 }
 \arguments{
 \item{...}{Zero or more objects which can be coerced to character.}
 
-\item{stain}{A Stain object. Defaults to \code{.__current_stain_object__}.}
+\item{slog_file}{A path to a log file Defaults to
+\code{.__current_stain_log__}.}
 }
 \description{
 A log can be kept for a certain slurm job. A Stain object must be provided or

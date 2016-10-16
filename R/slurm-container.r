@@ -35,14 +35,7 @@ Stain <- R6::R6Class("SlurmContainer",
                 # Write the necessary "helper" scripts.
                 stain_bash_slurm_write(dir)
                 stain_default_main_write(dir)
-
-                # Create a log file.
-                create_slog_file(self)
             }
-
-            # Set the current stain object.
-            .GlobalEnv$.__current_stain_object__ <- self
-            private$add_object(".__current_stain_object__", self)
 
             default_opts <- c(sbatch_opts$nodes(1),
                               sbatch_opts$memory("8g"),
@@ -132,6 +125,10 @@ Stain <- R6::R6Class("SlurmContainer",
             })
 
             tryCatch({
+                # Set the current stain object.
+                .GlobalEnv$.__current_stain_log__ <- self
+                private$add_object(".__current_stain_log__", self)
+
                 message("Uploading components...")
                 remote_host <- paste0(user, "@", host, ":", submit_dir)
                 stain_scp(from = self$dir, to = remote_host)
@@ -159,7 +156,10 @@ Stain <- R6::R6Class("SlurmContainer",
                 # Add the job id to submission history
                 output <- strsplit(output, " ")[[1]]
                 job_id <- as.numeric(output[length(output)])
-                stain_meta_sub_history_append(self$dir, job_id)
+
+                # Create a log file.
+                log_id  <- create_slog_file(self)
+                stain_meta_sub_history_append(self$dir, job_id, log_id)
 
                 message(paste("Submitted job", job_id, "to", remote_host))
             }, error = function(e) {
