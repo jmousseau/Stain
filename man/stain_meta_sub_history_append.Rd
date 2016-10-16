@@ -4,13 +4,15 @@
 \alias{stain_meta_sub_history_append}
 \title{Append a new submission history row.}
 \usage{
-stain_meta_sub_history_append(dir, job_id,
+stain_meta_sub_history_append(dir, job_id, log_id,
   sub_date = as.character(Sys.time()))
 }
 \arguments{
 \item{dir}{The location of the \code{.stain/} directory.}
 
 \item{job_id}{The slurm job identifier.}
+
+\item{log_id}{The log id for the particular submission.}
 
 \item{sub_date}{The submission date for the corresponding slurm job. Default
 value is \code{Sys.time()}.}

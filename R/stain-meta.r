@@ -134,9 +134,11 @@ stain_meta_sbatch_opts_read <- function(dir) {
 #'
 #' @param job_id The slurm job identifier.
 #'
+#' @param log_id The log id for the particular submission.
+#'
 #' @param sub_date The submission date for the corresponding slurm job. Default
 #' value is \code{Sys.time()}.
-stain_meta_sub_history_append <- function(dir, job_id,
+stain_meta_sub_history_append <- function(dir, job_id, log_id,
                                           sub_date = as.character(Sys.time())) {
     meta <- stain_meta_read(dir)
     submission_history <- meta$submission_history
@@ -144,11 +146,13 @@ stain_meta_sub_history_append <- function(dir, job_id,
     if (is.null(submission_history)) {
         submission_history <- data.frame(
             job_id = job_id,
+            log_id = log_id,
             submission_date = sub_date
         )
     } else {
         submission_history <- rbind(submission_history, list(
             job_id = job_id,
+            log_id = log_id,
             submission_date = sub_date
         ))
     }
