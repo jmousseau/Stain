@@ -254,6 +254,12 @@ Stain <- R6::R6Class("SlurmContainer",
         },
         get_id = function() {
             return(stain_meta_read(self$dir)$id)
+        },
+        get_log = function(log_id) {
+            con <- file(slog_file(stain, log_id))
+            contents <- readLines(con)
+            close.connection(con)
+            return(contents)
         }
     ),
     private = list(
