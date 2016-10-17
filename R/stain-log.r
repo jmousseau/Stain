@@ -4,7 +4,7 @@
 create_slog_file <- function(stain) {
     log_id <- rand_alphanumeric(12)
     slog_file <- slog_file(stain, log_id)
-    dir.create(dirname(slog_file), recursive = TRUE)
+    dir.create(dirname(slog_file), recursive = TRUE, showWarnings = FALSE)
     file.create(slog_file)
     return(log_id)
 }
