@@ -9,7 +9,7 @@ Stain <- R6::R6Class("SlurmContainer",
     public = list(
         dir = NULL,
         globals = list(),
-        initialize = function(dir = ".", options = c()){
+        initialize = function(name = NULL, dir = ".", options = c()){
 
             sub_dirs <- c("data", "sources", "objects")
             stain_dir <- paste0(dir, ".stain")
@@ -19,7 +19,8 @@ Stain <- R6::R6Class("SlurmContainer",
                 self$dir <- dir
                 private$update_globals()
             } else {
-                name <- paste0("job_", rand_alphanumeric())
+                placeholder <- paste0("stain_", rand_alphanumeric())
+                name <- ifelse(is.null(name), placeholder, name)
                 dir <- paste(getwd(), dir, name, "", sep = "/")
                 self$dir <- dir
 
