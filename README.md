@@ -1,21 +1,24 @@
 # Stain
 
-![](https://img.shields.io/badge/release-v0.7.0-red.svg?style=flat)
+![](https://img.shields.io/badge/release-v0.8.0-red.svg?style=flat)
 ![](https://img.shields.io/travis/jmousseau/Stain/master.svg)
 
 Stain (**S**lurm Con**tain**er) is an R package that generates "containers"
 for slurm jobs. **NOTE**: still in beta!
 
 
-### Installation + SSH Setup
+### Installation
 
 ```R
 devtools::install_github("jmousseau/Stain")
 ```
 
+### SSH Setup
+
 If slurm jobs are run on a remote host, setup a public/private ssh key to
 allow remote slurm job submissions. To automatically generate the bash code
-required to do so, see `?stain_ssh_setup`.
+required to do so, see `?stain_ssh_setup`. The documentation contains directions
+to set up ssh keys for the remote host.
 
 ---
 
@@ -60,7 +63,7 @@ pass a custom option using the form `"--<key>=<value>"`.
 
 ```R
 # Create a new slurm container in the current working directory.
-stain <- Stain$new(options = c(
+stain <- Stain$new(name = "stain-example", options = c(
     sbatch_opts$memory("16g"),
     sbatch_opts$mail_user("example@domain.com"),
     sbatch_mail_type_opts$all
@@ -129,9 +132,9 @@ accessible by our slurm container? The code below will configure the container
 for a new input file.
 
 ```R
-# "job_<alphanumeric>/" would be the directory of a previously existing slurm
-# container.
-stain <- Stain$new("job_<alphanumeric>/")
+# "stain-example" is the directory specified previously by the "name" parameter
+# which now represents a directory of an existing slurm container.
+stain <- Stain$new("stain-example")
 
 # Add the new data file.
 stain$add_data("data_2.txt")
@@ -172,6 +175,27 @@ the different `"--dependency"` flag options.
 
 ---
 
+### Logs
+
+Stain will automatically store the log output of each submission in a separate
+log file. The log file is specified by a unique identifier assigned during
+submission.
+
+```R
+# Fetch all log files from the remote host.
+stain$fetch_logs()
+
+# The submission history will contain a column named "log_id".
+stain$submission_history()
+
+# Read the contents of a specific log file.
+contents <- stain$get_log("<log id>")
+
+```
+
+
+---
+
 ### Slurm Container Details <a name="slurm-container-details"></a>
 
 A slurm container is simply a directory structure to organize components
@@ -189,6 +213,15 @@ be loaded prior to executing any R code.
 - `sources/` Any R source files specified in a `Stain` object will be copied
 here. One of the source files must contain a `main()` function. Also contains
 `.default_stain_main.R` which executes the R code.
+
+- `logs/` A log file with a unique identifier and path will be stored here for
+each submission. Log ids are list in the `Stain` object `submission_history()`
+method.
+
+- `meta.json` A JSON file that stores metadata about the `Stain`. Information
+includes things like previously used sbatch options, for when someone loads an
+existing `Stain` and expects the options when submitting to be the same as those
+specified during initialization, and submission history.
 
 The files in `sources/` and `data/` may be listed using the `list_files()`
 `Stain` method.
