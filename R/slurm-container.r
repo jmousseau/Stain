@@ -30,8 +30,7 @@ Stain <- R6::R6Class("SlurmContainer",
                 }
 
                 stain_meta_create(dir)
-                uuid <- system("uuidgen", intern = TRUE)
-                stain_meta_set_id(dir, uuid)
+                stain_meta_set_id(dir, rand_alphanumeric(12))
 
                 # Write the necessary "helper" scripts.
                 stain_bash_slurm_write(dir)
